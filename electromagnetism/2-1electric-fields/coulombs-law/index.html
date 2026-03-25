@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coulomb's Law Explorer</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics — Topic 2: Electromagnetism</p>
+        <h1>Coulomb's Law Explorer</h1>
+        <p class="intro">
+          Drag two point charges and adjust their magnitudes to explore how
+          electrostatic force depends on charge and separation.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="btn-show-forces" class="toggle-button" type="button" aria-pressed="false">
+          Show Forces
+        </button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Controls</h2>
+
+        <div class="control-group">
+          <label>Charge 1, \(q_1\)</label>
+          <div class="sign-row">
+            <button class="sign-btn positive active" id="q1-sign-pos" type="button" aria-pressed="true">+</button>
+            <button class="sign-btn negative" id="q1-sign-neg" type="button" aria-pressed="false">−</button>
+          </div>
+          <input id="q1-slider" type="range" min="1" max="10" step="1" value="1">
+          <p id="q1-display" class="value-display"></p>
+        </div>
+
+        <div class="control-group">
+          <label>Charge 2, \(q_2\)</label>
+          <div class="sign-row">
+            <button class="sign-btn positive" id="q2-sign-pos" type="button" aria-pressed="false">+</button>
+            <button class="sign-btn negative active" id="q2-sign-neg" type="button" aria-pressed="true">−</button>
+          </div>
+          <input id="q2-slider" type="range" min="1" max="10" step="1" value="1">
+          <p id="q2-display" class="value-display"></p>
+        </div>
+
+        <div class="readout-grid">
+          <div class="readout-card">
+            <span class="readout-label">Coulomb's constant</span>
+            <span class="readout-value">\(k = 8.99 \times 10^{9}\,\mathrm{N\,m^2\,C^{-2}}\)</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Separation \(r\)</span>
+            <span id="readout-r" class="readout-value">—</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Force \(|F|\)</span>
+            <span id="readout-f" class="readout-value">—</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap" id="canvas-wrap">
+          <canvas id="simulation-canvas" width="960" height="560" aria-label="Coulomb's law canvas"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
