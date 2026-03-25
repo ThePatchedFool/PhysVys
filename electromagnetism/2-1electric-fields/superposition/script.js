@@ -218,51 +218,49 @@ function draw() {
   // ── Force arrows ──
   if (state.showForces) {
     let netFx = 0, netFy = 0;
-    const ARROW_SCALE = 4e-4; // px per N — tuned visually
 
-    const forceVecs = sources.map((src, si) => {
+    const forceVecs = sources.map((src) => {
       const { fx, fy } = coulombVector(src, test);
+      netFx += fx;
+      netFy += fy;
       return { fx, fy, srcIdx: src.id };
     });
 
-    // Individual forces from charge edge
-    forceVecs.forEach(({ fx, fy, srcIdx }) => {
-      const dispX = fx * ARROW_SCALE;
-      const dispY = fy * ARROW_SCALE;
-      const len   = Math.sqrt(dispX * dispX + dispY * dispY);
-      const clamp = Math.min(len, 160) / (len || 1);
-      const col   = srcIdx < testIdx ? COLORS.force0 : COLORS.force1;
-      const lbl   = `F${srcIdx + 1}${testIdx + 1}`;
-      drawForceArrow(test.x, test.y, dispX * clamp, dispY * clamp, col, lbl);
-      netFx += fx;
-      netFy += fy;
+    // Proportional scale: largest force maps to TARGET_PX so tip-to-tail is geometrically correct
+    const TARGET_PX = 130;
+    const maxF = Math.max(...forceVecs.map(({ fx, fy }) => Math.sqrt(fx * fx + fy * fy)), 1e-30);
+    const scale = TARGET_PX / maxF;
+
+    // Individual force arrows
+    forceVecs.forEach(({ fx, fy, srcIdx }, si) => {
+      const col = si === 0 ? COLORS.force0 : COLORS.force1;
+      const lbl = `F${srcIdx + 1}${testIdx + 1}`;
+      drawForceArrow(test.x, test.y, fx * scale, fy * scale, col, lbl);
     });
 
-    // Tip-to-tail construction (dashed)
+    // Tip-to-tail construction (dashed ghost arrows offset from origin)
     let tailX = test.x, tailY = test.y;
     ctx.save();
     ctx.setLineDash([6, 4]);
-    forceVecs.forEach(({ fx, fy, srcIdx }) => {
-      const dispX = fx * ARROW_SCALE;
-      const dispY = fy * ARROW_SCALE;
-      const len   = Math.sqrt(dispX * dispX + dispY * dispY);
-      const clamp = Math.min(len, 160) / (len || 1);
-      const col   = srcIdx < testIdx ? COLORS.force0 : COLORS.force1;
+    forceVecs.forEach(({ fx, fy }, si) => {
+      const col = si === 0 ? COLORS.force0 : COLORS.force1;
+      const nextX = tailX + fx * scale;
+      const nextY = tailY + fy * scale;
       ctx.beginPath();
       ctx.moveTo(tailX, tailY);
-      tailX += dispX * clamp;
-      tailY += dispY * clamp;
-      ctx.lineTo(tailX, tailY);
+      ctx.lineTo(nextX, nextY);
       ctx.strokeStyle = col;
       ctx.lineWidth = 1.5;
       ctx.stroke();
+      // small arrowhead on ghost
+      arrowHead(nextX, nextY, Math.atan2(fy, fx), 8, col);
+      tailX = nextX;
+      tailY = nextY;
     });
     ctx.restore();
 
     // Resultant
-    const netDisp = Math.sqrt(netFx * netFx + netFy * netFy) * ARROW_SCALE;
-    const netClamp = Math.min(netDisp, 160) / (netDisp || 1);
-    drawForceArrow(test.x, test.y, netFx * ARROW_SCALE * netClamp, netFy * ARROW_SCALE * netClamp, COLORS.fnet, 'Fₙₑₜ');
+    drawForceArrow(test.x, test.y, netFx * scale, netFy * scale, COLORS.fnet, 'F\u2099\u2091\u209c');
 
     // Readouts
     updateReadouts(forceVecs, netFx, netFy);
@@ -277,14 +275,13 @@ function draw() {
 /* ── Readout updates ── */
 function updateReadouts(forceVecs, netFx, netFy) {
   const testIdx = state.testId;
-  const srcIndices = state.charges.map((_, i) => i).filter(i => i !== testIdx);
 
-  forceVecs.forEach(({ fx, fy }, si) => {
-    const mag = Math.sqrt(fx * fx + fy * fy);
-    const srcIdx = srcIndices[si];
-    const num = srcIdx < testIdx ? 1 : 2;
-    const labelEl = document.getElementById(`readout-f${num}-label`);
-    const valEl   = document.getElementById(`readout-f${num}`);
+  // forceVecs is always length 2; slot 0 → readout-f1, slot 1 → readout-f2
+  forceVecs.forEach(({ fx, fy, srcIdx }, si) => {
+    const mag    = Math.sqrt(fx * fx + fy * fy);
+    const slot   = si + 1;
+    const labelEl = document.getElementById(`readout-f${slot}-label`);
+    const valEl   = document.getElementById(`readout-f${slot}`);
     if (labelEl) labelEl.textContent = `Force from q${srcIdx + 1} on q${testIdx + 1}`;
     if (valEl)   valEl.textContent   = formatSciN(mag, 'N');
   });
@@ -479,8 +476,8 @@ canvas.addEventListener('mousemove', e => {
   if (!state.drag) return;
   const { x, y } = canvasPoint(e);
   const ch = state.charges[state.drag.id];
-  const nx = x - state.drag.offX;
-  const ny = y - state.drag.offY;
+  const nx = Math.max(CHARGE_RADIUS, Math.min(cssWidth()  - CHARGE_RADIUS, x - state.drag.offX));
+  const ny = Math.max(CHARGE_RADIUS, Math.min(cssHeight() - CHARGE_RADIUS, y - state.drag.offY));
   if (Math.abs(nx - ch.x) > 3 || Math.abs(ny - ch.y) > 3) state.drag.moved = true;
   ch.x = nx;
   ch.y = ny;
