@@ -315,26 +315,29 @@ function drawArrow(x, y, force, color, label, magnitudeLabel, options = {}) {
 }
 
 function drawMass(x, y, radius, color, label, value) {
-  const gradient = ctx.createRadialGradient(x - radius * 0.3, y - radius * 0.3, radius * 0.2, x, y, radius);
-  gradient.addColorStop(0, 'rgba(255,255,255,0.95)');
-  gradient.addColorStop(0.2, color);
-  gradient.addColorStop(1, 'rgba(16, 24, 40, 0.95)');
+  const gradient = ctx.createRadialGradient(x - radius * 0.3, y - radius * 0.3, radius * 0.15, x, y, radius);
+  gradient.addColorStop(0, 'rgba(255,255,255,0.9)');
+  gradient.addColorStop(0.25, color);
+  gradient.addColorStop(1, 'rgba(16, 24, 40, 0.85)');
 
   ctx.save();
-  ctx.fillStyle = gradient;
   ctx.beginPath();
   ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.fillStyle = gradient;
   ctx.fill();
-  ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+  ctx.lineWidth = 1.5;
   ctx.stroke();
 
-  ctx.fillStyle = '#10253d';
+  ctx.fillStyle = 'white';
   ctx.textAlign = 'center';
-  ctx.font = `700 22px ${CANVAS_FONT}`;
-  ctx.fillText(label, x, y + 7);
+  ctx.textBaseline = 'middle';
+  ctx.font = `700 20px ${CANVAS_FONT}`;
+  ctx.fillText(label, x, y);
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = color;
   ctx.font = `500 15px ${CANVAS_FONT}`;
-  ctx.fillText(formatScientific(value, 'kg'), x, y + radius + 24);
+  ctx.fillText(formatScientific(value, 'kg'), x, y + radius + 22);
   ctx.restore();
 }
 
@@ -494,6 +497,15 @@ function draw() {
     drawTwoBody(screenXs, masses, radii, baseY, width, height, positions);
   } else {
     drawThreeBody(screenXs, masses, radii, baseY, width, height, positions);
+  }
+
+  // Live force readout
+  const f12 = Math.abs(pairForce(masses[0], masses[1], positions[0], positions[1]));
+  const forceReadout = document.getElementById('force-readout');
+  if (forceReadout) {
+    forceReadout.textContent = Number.isFinite(f12)
+      ? formatScientific(f12, 'N')
+      : '∞ N';
   }
 }
 

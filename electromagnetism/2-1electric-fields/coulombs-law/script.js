@@ -388,6 +388,39 @@ function updateDisplays() {
   q2Display.textContent = formatCharge('q2');
 }
 
+// ─── Sign toggles ─────────────────────────────────────────────────────────────
+
+function setSign(key, sign) {
+  state[key].sign = sign;
+  const posBtn = document.getElementById(`${key}-sign-pos`);
+  const negBtn = document.getElementById(`${key}-sign-neg`);
+  posBtn.classList.toggle('active', sign === '+');
+  posBtn.setAttribute('aria-pressed', String(sign === '+'));
+  negBtn.classList.toggle('active', sign === '-');
+  negBtn.setAttribute('aria-pressed', String(sign === '-'));
+  updateDisplays();
+  draw();
+}
+
+document.getElementById('q1-sign-pos').addEventListener('click', () => setSign('q1', '+'));
+document.getElementById('q1-sign-neg').addEventListener('click', () => setSign('q1', '-'));
+document.getElementById('q2-sign-pos').addEventListener('click', () => setSign('q2', '+'));
+document.getElementById('q2-sign-neg').addEventListener('click', () => setSign('q2', '-'));
+
+// ─── Magnitude sliders ────────────────────────────────────────────────────────
+
+document.getElementById('q1-slider').addEventListener('input', (e) => {
+  state.q1.magnitude = Number(e.target.value);
+  updateDisplays();
+  draw();
+});
+
+document.getElementById('q2-slider').addEventListener('input', (e) => {
+  state.q2.magnitude = Number(e.target.value);
+  updateDisplays();
+  draw();
+});
+
 // ─── Show Forces toggle ───────────────────────────────────────────────────────
 
 btnShowForces.addEventListener('click', () => {
