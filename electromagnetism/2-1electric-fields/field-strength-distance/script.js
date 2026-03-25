@@ -167,6 +167,64 @@ function drawRadialLine() {
   ctx.fillText(rText, mx - uy * 14, my + ux * 14);
 }
 
+function fieldArrowLength(E) {
+  // Log-normalize: map log10(E) from -5 → 12 to arrow length 20 → 150 px
+  const norm = (Math.log10(Math.max(E, 1e-10)) - (-5)) / (12 - (-5));
+  return 20 + Math.max(0, Math.min(1, norm)) * 130;
+}
+
+function drawFieldArrow() {
+  const sx = sourceX(), sy = sourceY();
+  const tx = state.testX,  ty = state.testY;
+  const dx = tx - sx,       dy = ty - sy;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist < 1) return;
+
+  const rM = dist / PIXELS_PER_METRE;
+  const E  = K * state.magnitude / (rM * rM);
+  const len = fieldArrowLength(E);
+
+  // Field direction: away from Q if positive, toward Q if negative
+  const ux = (dx / dist) * state.sign;
+  const uy = (dy / dist) * state.sign;
+
+  const x1 = tx + ux * (TEST_RADIUS + 4);
+  const y1 = ty + uy * (TEST_RADIUS + 4);
+  const x2 = x1 + ux * len;
+  const y2 = y1 + uy * len;
+
+  const col = '#0f766e';
+
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.strokeStyle = col;
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Arrowhead
+  const angle = Math.atan2(uy, ux);
+  const headSize = 10;
+  ctx.save();
+  ctx.translate(x2, y2);
+  ctx.rotate(angle);
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(-headSize, -headSize * 0.45);
+  ctx.lineTo(-headSize,  headSize * 0.45);
+  ctx.closePath();
+  ctx.fillStyle = col;
+  ctx.fill();
+  ctx.restore();
+
+  // E label beside arrowhead
+  ctx.fillStyle = col;
+  ctx.font = 'bold 12px "Trebuchet MS", sans-serif';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('E', x2 + ux * 6 - uy * 14, y2 + uy * 6 + ux * 14);
+}
+
 function drawFieldArea() {
   const W = fieldWidth();
   const H = cssHeight();
@@ -185,6 +243,7 @@ function draw() {
   ctx.clearRect(0, 0, W, H);
   drawFieldArea();
   drawRadialLine();
+  drawFieldArrow();
   drawSourceCharge();
   drawTestPoint();
   updateReadouts();
