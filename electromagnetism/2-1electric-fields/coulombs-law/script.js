@@ -198,6 +198,100 @@ function drawCharge(charge, label) {
   ctx.restore();
 }
 
+// ─── Force arrows ─────────────────────────────────────────────────────────────
+
+function forceArrowLength(f) {
+  if (!Number.isFinite(f) || f <= 0) return 24;
+  // Log scale: 0.0005 N → 24 px, 50 N → 130 px
+  const norm = Math.max(0, Math.min(1, (Math.log10(f) + 3.3) / 5.3));
+  return 24 + norm * 106;
+}
+
+function drawForceArrow(charge, dirX, dirY, length, color, label) {
+  const sx = charge.x + dirX * (CHARGE_RADIUS + 2);
+  const sy = charge.y + dirY * (CHARGE_RADIUS + 2);
+  const ex = sx + dirX * length;
+  const ey = sy + dirY * length;
+  const midX = (sx + ex) / 2;
+  const midY = (sy + ey) / 2;
+  const headLen = 13;
+  const angle = Math.atan2(dirY, dirX);
+
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = 4;
+  ctx.lineCap = 'round';
+
+  ctx.beginPath();
+  ctx.moveTo(sx, sy);
+  ctx.lineTo(ex, ey);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(ex, ey);
+  ctx.lineTo(ex - headLen * Math.cos(angle - 0.42), ey - headLen * Math.sin(angle - 0.42));
+  ctx.lineTo(ex - headLen * Math.cos(angle + 0.42), ey - headLen * Math.sin(angle + 0.42));
+  ctx.closePath();
+  ctx.fill();
+
+  // Label offset perpendicular to the arrow
+  ctx.font = `700 13px ${CANVAS_FONT}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, midX - dirY * 20, midY + dirX * 20);
+  ctx.restore();
+}
+
+function drawForces() {
+  const { q1, q2 } = state;
+  const dx = q2.x - q1.x;
+  const dy = q2.y - q1.y;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist < 1) return;
+
+  const ux = dx / dist;
+  const uy = dy / dist;
+  const f = coulombForce();
+  const len = forceArrowLength(f);
+  const attractive = q1.sign !== q2.sign;
+
+  // Force on q1: toward q2 (attractive) or away from q2 (repulsive)
+  const d1x = attractive ? ux : -ux;
+  const d1y = attractive ? uy : -uy;
+  // Force on q2: Newton's Third Law — opposite to force on q1
+  const d2x = -d1x;
+  const d2y = -d1y;
+
+  drawForceArrow(q1, d1x, d1y, len, chargeColor(q1.sign), 'F on q₁');
+  drawForceArrow(q2, d2x, d2y, len, chargeColor(q2.sign), 'F on q₂');
+}
+
+function drawInteractionBadge() {
+  const { q1, q2 } = state;
+  const attractive = q1.sign !== q2.sign;
+  const label = attractive ? 'Attractive' : 'Repulsive';
+  const bgColor = attractive ? 'rgba(13, 148, 136, 0.12)' : 'rgba(220, 38, 38, 0.12)';
+  const textColor = attractive ? '#0f766e' : '#b91c1c';
+
+  const textW = 110;
+  const bx = canvas.width / 2 - textW / 2;
+  const by = 18;
+  const bh = 30;
+
+  ctx.save();
+  ctx.fillStyle = bgColor;
+  ctx.beginPath();
+  ctx.roundRect(bx, by, textW, bh, 999);
+  ctx.fill();
+  ctx.fillStyle = textColor;
+  ctx.font = `700 14px ${CANVAS_FONT}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, canvas.width / 2, by + bh / 2);
+  ctx.restore();
+}
+
 function updateReadouts() {
   const r = separationMetres();
   const f = coulombForce();
@@ -212,7 +306,10 @@ function draw() {
   drawDistanceLine();
   drawScaleBar();
 
-  // Force arrows will be added in Chunk 4.
+  if (state.showForces) {
+    drawForces();
+    drawInteractionBadge();
+  }
 
   drawCharge(state.q1, 'q₁');
   drawCharge(state.q2, 'q₂');
@@ -290,6 +387,16 @@ function updateDisplays() {
   q1Display.textContent = formatCharge('q1');
   q2Display.textContent = formatCharge('q2');
 }
+
+// ─── Show Forces toggle ───────────────────────────────────────────────────────
+
+btnShowForces.addEventListener('click', () => {
+  state.showForces = !state.showForces;
+  btnShowForces.textContent = state.showForces ? 'Hide Forces' : 'Show Forces';
+  btnShowForces.classList.toggle('active', state.showForces);
+  btnShowForces.setAttribute('aria-pressed', String(state.showForces));
+  draw();
+});
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
