@@ -225,16 +225,162 @@ function drawFieldArrow() {
   ctx.fillText('E', x2 + ux * 6 - uy * 14, y2 + uy * 6 + ux * 14);
 }
 
-function drawFieldArea() {
-  const W = fieldWidth();
-  const H = cssHeight();
-  // subtle divider
-  ctx.strokeStyle = 'rgba(21, 48, 77, 0.08)';
+/* ── Graph helpers ── */
+
+const GPAD = { left: 58, right: 14, top: 24, bottom: 36 };
+
+function graphArea() {
+  const fx = fieldWidth();
+  const W  = cssWidth();
+  const H  = cssHeight();
+  return {
+    ox: fx + GPAD.left,
+    oy: H  - GPAD.bottom,
+    w:  W  - fx - GPAD.left - GPAD.right,
+    h:  H  - GPAD.top  - GPAD.bottom,
+    fx,
+  };
+}
+
+function rMaxGraph() {
+  // max distance from source to far edge of field area
+  return (fieldWidth() - sourceX() - SOURCE_RADIUS - TEST_RADIUS - 4) / PIXELS_PER_METRE;
+}
+
+function niceAxisMax(val) {
+  if (val <= 0) return 1;
+  const exp  = Math.floor(Math.log10(val));
+  const frac = val / Math.pow(10, exp);
+  let nice = frac <= 1 ? 1 : frac <= 2 ? 2 : frac <= 2.5 ? 2.5 : frac <= 5 ? 5 : 10;
+  return nice * Math.pow(10, exp);
+}
+
+function compactSci(val) {
+  if (val === 0) return '0';
+  const exp = Math.floor(Math.log10(Math.abs(val)));
+  const man = Math.round((val / Math.pow(10, exp)) * 10) / 10;
+  return man === 1 ? `10${toSuperscript(exp)}` : `${man}×10${toSuperscript(exp)}`;
+}
+
+function drawGraph() {
+  const g   = graphArea();
+  const W   = cssWidth();
+  const H   = cssHeight();
+
+  // Panel background
+  ctx.fillStyle = 'rgba(242, 248, 255, 0.75)';
+  ctx.fillRect(g.fx, 0, W - g.fx, H);
+
+  const rxMax = rMaxGraph();
+  const rMinM = (SOURCE_RADIUS + TEST_RADIUS + 4) / PIXELS_PER_METRE;
+  const eyMax = niceAxisMax(K * state.magnitude / (rMinM * rMinM));
+
+  const toX = r => g.ox + (r          / rxMax) * g.w;
+  const toY = E => g.oy - (Math.min(E, eyMax) / eyMax) * g.h;
+
+  // Grid lines
+  const N = 5;
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= N; i++) {
+    ctx.strokeStyle = 'rgba(21,48,77,0.07)';
+    ctx.beginPath();
+    ctx.moveTo(toX(i / N * rxMax), g.oy - g.h);
+    ctx.lineTo(toX(i / N * rxMax), g.oy);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(g.ox,        toY(i / N * eyMax));
+    ctx.lineTo(g.ox + g.w,  toY(i / N * eyMax));
+    ctx.stroke();
+  }
+
+  // Curve E = k|Q|/r²
+  ctx.beginPath();
+  let started = false;
+  for (let i = 0; i <= 300; i++) {
+    const r = rMinM + (i / 300) * (rxMax - rMinM);
+    const E = K * state.magnitude / (r * r);
+    const x = toX(r);
+    const y = toY(E);
+    if (!started) { ctx.moveTo(x, y); started = true; }
+    else           ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = '#0f766e';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Current position tracking dot
+  const dx = state.testX - sourceX();
+  const dy = state.testY - sourceY();
+  const rCur = Math.sqrt(dx * dx + dy * dy) / PIXELS_PER_METRE;
+  const eCur = K * state.magnitude / (rCur * rCur);
+  const dotX = toX(rCur);
+  const dotY = toY(eCur);
+
+  // Dashed crosshairs to axes
+  ctx.save();
+  ctx.setLineDash([4, 4]);
+  ctx.strokeStyle = 'rgba(15,118,110,0.35)';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(W, 12);
-  ctx.lineTo(W, H - 12);
+  ctx.moveTo(dotX, g.oy); ctx.lineTo(dotX, Math.max(dotY, g.oy - g.h));
+  ctx.moveTo(g.ox, Math.max(dotY, g.oy - g.h)); ctx.lineTo(dotX, Math.max(dotY, g.oy - g.h));
   ctx.stroke();
+  ctx.restore();
+
+  // Dot
+  ctx.beginPath();
+  ctx.arc(dotX, Math.max(dotY, g.oy - g.h), 5, 0, Math.PI * 2);
+  ctx.fillStyle   = '#0f766e';
+  ctx.fill();
+  ctx.strokeStyle = 'white';
+  ctx.lineWidth   = 2;
+  ctx.stroke();
+
+  // Axes
+  ctx.strokeStyle = 'rgba(21,48,77,0.45)';
+  ctx.lineWidth   = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(g.ox, g.oy - g.h);
+  ctx.lineTo(g.ox, g.oy);
+  ctx.lineTo(g.ox + g.w, g.oy);
+  ctx.stroke();
+
+  // Tick labels — r axis
+  ctx.fillStyle    = 'rgba(21,48,77,0.6)';
+  ctx.font         = '11px "Trebuchet MS", sans-serif';
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'top';
+  for (let i = 0; i <= N; i++) {
+    const r = (i / N) * rxMax;
+    ctx.fillText(r.toFixed(1), toX(r), g.oy + 5);
+  }
+
+  // Tick labels — E axis
+  ctx.textAlign    = 'right';
+  ctx.textBaseline = 'middle';
+  for (let i = 0; i <= N; i++) {
+    const E = (i / N) * eyMax;
+    ctx.fillText(i === 0 ? '0' : compactSci(E), g.ox - 5, toY(E));
+  }
+
+  // Axis labels
+  ctx.fillStyle    = 'rgba(21,48,77,0.75)';
+  ctx.font         = 'bold 12px "Trebuchet MS", sans-serif';
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillText('r (m)', g.ox + g.w / 2, g.oy + 20);
+
+  ctx.save();
+  ctx.translate(g.fx + 12, g.oy - g.h / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('E (N C⁻¹)', 0, 0);
+  ctx.restore();
+}
+
+function drawFieldArea() {
+  // nothing needed — graph panel provides the visual separation
 }
 
 function draw() {
@@ -242,6 +388,7 @@ function draw() {
   const H = cssHeight();
   ctx.clearRect(0, 0, W, H);
   drawFieldArea();
+  drawGraph();
   drawRadialLine();
   drawFieldArrow();
   drawSourceCharge();
