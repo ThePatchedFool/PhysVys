@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electric Field Strength vs Distance</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics — Topic 2: Electromagnetism</p>
+        <h1>Electric Field Strength vs Distance</h1>
+        <p class="intro">
+          Drag the test point to explore how field strength \(E = kQ/r^2\)
+          varies with distance from a point charge. The graph tracks the
+          inverse-square relationship in real time.
+        </p>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Controls</h2>
+
+        <div class="mode-toggle-row">
+          <button id="btn-mode-explore" class="mode-btn active" type="button" aria-pressed="true">Explore</button>
+          <button id="btn-mode-custom"  class="mode-btn"        type="button" aria-pressed="false">Custom</button>
+        </div>
+
+        <div class="control-group">
+          <label>Source charge, \(Q\)</label>
+          <div class="sign-row">
+            <button class="sign-btn positive active" id="q-sign-pos" type="button" aria-pressed="true">+</button>
+            <button class="sign-btn negative"        id="q-sign-neg" type="button" aria-pressed="false">−</button>
+          </div>
+          <div id="q-explore" class="explore-controls">
+            <input id="q-log-slider" class="log-slider" type="range" min="-19" max="0" step="0.05" value="-6">
+          </div>
+          <div id="q-custom" class="custom-controls is-hidden">
+            <input id="q-mantissa-slider" type="range" min="1" max="9.99" step="0.01" value="1.00">
+            <div class="scientific-row">
+              <input id="q-mantissa-input" type="number" min="1" max="9.99" step="0.01" value="1.00">
+              <span class="times-ten">&times; 10</span>
+              <input id="q-exponent-input" class="exponent-input" type="number" min="-99" max="99" step="1" value="-6">
+            </div>
+          </div>
+          <p id="q-display" class="value-display"></p>
+        </div>
+
+        <div class="readout-grid">
+          <div class="readout-card">
+            <span class="readout-label">Coulomb's constant</span>
+            <span class="readout-value">\(k = 8.99 \times 10^{9}\,\mathrm{N\,m^2\,C^{-2}}\)</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Distance \(r\)</span>
+            <span id="readout-r" class="readout-value">—</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Field strength \(E\)</span>
+            <span id="readout-e" class="readout-value">—</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Force on \(+1\,\mu\mathrm{C}\) test charge</span>
+            <span id="readout-f" class="readout-value">—</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap" id="canvas-wrap">
+          <canvas id="simulation-canvas" width="960" height="560" aria-label="Electric field strength vs distance canvas"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
