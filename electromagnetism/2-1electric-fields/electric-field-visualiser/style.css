@@ -1,0 +1,351 @@
+:root {
+  --bg-top: #eef6ff;
+  --bg-bottom: #d7e8ff;
+  --panel: rgba(255, 255, 255, 0.82);
+  --panel-border: rgba(18, 57, 99, 0.12);
+  --ink: #15304d;
+  --muted: #55708d;
+  --accent: #0f766e;
+  --accent-strong: #0d9488;
+  --shadow: 0 24px 60px rgba(19, 48, 77, 0.14);
+  --positive: #dc2626;
+  --positive-light: #fee2e2;
+  --negative: #2563eb;
+  --negative-light: #dbeafe;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.85), transparent 30%),
+    linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+}
+
+.page {
+  width: min(1280px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0 2rem;
+}
+
+/* ── Hero ── */
+
+.hero {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: end;
+}
+
+.hero-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(21, 48, 77, 0.12);
+}
+
+.hero-link:hover {
+  background: white;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 0.95;
+}
+
+.intro {
+  max-width: 68ch;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* ── Layout ── */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 390px) minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+/* ── Controls ── */
+
+.controls {
+  padding: 1.25rem;
+}
+
+.controls h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.control-group {
+  margin-bottom: 1.25rem;
+}
+
+.control-group label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-weight: 700;
+}
+
+select {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(21, 48, 77, 0.16);
+  border-radius: 14px;
+  font: inherit;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent-strong);
+}
+
+/* ── Charge tray ── */
+
+.tray-hint {
+  margin: 0 0 0.6rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.charge-tray {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 18px;
+  border: 2px dashed rgba(21, 48, 77, 0.18);
+  background: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.6rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.charge-tray.drop-target {
+  border-color: var(--accent-strong);
+  background: rgba(13, 148, 136, 0.08);
+}
+
+.charge-token {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  cursor: grab;
+  user-select: none;
+  font-size: 1.6rem;
+  font-weight: 900;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.charge-token:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+}
+
+.charge-token:active {
+  cursor: grabbing;
+}
+
+.charge-token.positive {
+  background: var(--positive);
+  color: white;
+  border: 3px solid #b91c1c;
+}
+
+.charge-token.negative {
+  background: var(--negative);
+  color: white;
+  border: 3px solid #1d4ed8;
+}
+
+.token-symbol {
+  line-height: 1;
+  margin-top: -2px;
+}
+
+/* ── Selected charge panel ── */
+
+.magnitude-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.magnitude-prefix {
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.magnitude-readout {
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  min-width: 3.5rem;
+  text-align: right;
+}
+
+.delete-button {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 2px solid #dc2626;
+  border-radius: 14px;
+  background: transparent;
+  color: #dc2626;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.delete-button:hover {
+  background: #dc2626;
+  color: white;
+}
+
+/* ── Readout cards ── */
+
+.readout-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.readout-card {
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  background: rgba(239, 247, 255, 0.95);
+}
+
+.readout-label {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.readout-value {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.field-readout-empty {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ── Toggle buttons ── */
+
+.toggle-button {
+  padding: 0.85rem 1.15rem;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #475569, #64748b);
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(71, 85, 105, 0.22);
+  transition: background 0.15s;
+}
+
+.toggle-button.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 10px 24px rgba(15, 118, 110, 0.28);
+}
+
+/* ── Canvas ── */
+
+.visual-panel {
+  padding: 0.85rem;
+}
+
+.canvas-wrap {
+  overflow: hidden;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(225, 238, 255, 0.94));
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 12 / 7;
+  cursor: default;
+}
+
+canvas.dragging {
+  cursor: grabbing;
+}
+
+/* ── Utility ── */
+
+.is-hidden {
+  display: none;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 960px) {
+  .hero {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .hero-actions {
+    justify-content: start;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

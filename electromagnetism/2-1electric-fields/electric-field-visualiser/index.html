@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electric Field Visualiser</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics — Topic 2: Electromagnetism</p>
+        <h1>Electric Field Visualiser</h1>
+        <p class="intro">
+          Drag positive and negative charges onto the canvas to build charge configurations
+          and explore the resulting electric field.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="btn-mode-arrows" class="toggle-button active" type="button" aria-pressed="true">
+          Arrow Grid
+        </button>
+        <button id="btn-mode-lines" class="toggle-button" type="button" aria-pressed="false">
+          Field Lines
+        </button>
+        <button id="btn-mode-both" class="toggle-button" type="button" aria-pressed="false">
+          Both
+        </button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Controls</h2>
+
+        <div class="control-group">
+          <label>Preset</label>
+          <select id="preset-select">
+            <option value="empty">Empty</option>
+            <option value="plates">Parallel Plates</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Add a charge</label>
+          <p class="tray-hint">Drag a charge token onto the canvas.</p>
+          <div class="charge-tray" id="charge-tray">
+            <div class="charge-token positive" id="token-positive" draggable="true" aria-label="Positive charge token">
+              <span class="token-symbol">+</span>
+            </div>
+            <div class="charge-token negative" id="token-negative" draggable="true" aria-label="Negative charge token">
+              <span class="token-symbol">−</span>
+            </div>
+          </div>
+          <p class="tray-hint">Drop a charge back here to remove it.</p>
+        </div>
+
+        <div id="selected-panel" class="control-group is-hidden">
+          <label id="selected-label">Selected charge</label>
+          <div class="magnitude-row">
+            <span class="magnitude-prefix">\(|q|\) =</span>
+            <input id="magnitude-slider" type="range" min="1" max="10" step="1" value="1">
+            <span id="magnitude-value" class="magnitude-readout">1 nC</span>
+          </div>
+          <button id="btn-delete" class="delete-button" type="button">Delete charge</button>
+        </div>
+
+        <div class="readout-grid">
+          <div class="readout-card">
+            <span class="readout-label">Coulomb's constant</span>
+            <span class="readout-value">\(k = 8.99 \times 10^{9}\,\mathrm{N\,m^2\,C^{-2}}\)</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Field at cursor</span>
+            <span id="field-readout" class="readout-value field-readout-empty">—</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap" id="canvas-wrap">
+          <canvas id="simulation-canvas" width="960" height="560" aria-label="Electric field canvas"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
