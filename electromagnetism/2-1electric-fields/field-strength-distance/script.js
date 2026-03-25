@@ -217,12 +217,12 @@ function drawFieldArrow() {
   ctx.fill();
   ctx.restore();
 
-  // E label beside arrowhead
+  // E label — perpendicular offset from arrowhead, centred so direction doesn't matter
   ctx.fillStyle = col;
   ctx.font = 'bold 12px "Trebuchet MS", sans-serif';
-  ctx.textAlign = 'left';
+  ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('E', x2 + ux * 6 - uy * 14, y2 + uy * 6 + ux * 14);
+  ctx.fillText('E', x2 - uy * 16, y2 + ux * 16);
 }
 
 /* ── Graph helpers ── */
@@ -243,8 +243,8 @@ function graphArea() {
 }
 
 function rMaxGraph() {
-  // max distance from source to far edge of field area
-  return (fieldWidth() - sourceX() - SOURCE_RADIUS - TEST_RADIUS - 4) / PIXELS_PER_METRE;
+  // max r when test point is dragged to far-right edge of field area
+  return (fieldWidth() - TEST_RADIUS - 4 - sourceX()) / PIXELS_PER_METRE;
 }
 
 function niceAxisMax(val) {
@@ -379,15 +379,10 @@ function drawGraph() {
   ctx.restore();
 }
 
-function drawFieldArea() {
-  // nothing needed — graph panel provides the visual separation
-}
-
 function draw() {
   const W = cssWidth();
   const H = cssHeight();
   ctx.clearRect(0, 0, W, H);
-  drawFieldArea();
   drawGraph();
   drawRadialLine();
   drawFieldArrow();
@@ -525,6 +520,16 @@ function hitTestPoint(x, y) {
   return dx * dx + dy * dy <= (TEST_RADIUS + 6) ** 2;
 }
 
+function applyDragMove(x, y) {
+  const fw = fieldWidth();
+  const dx = x - sourceX(), dy = y - sourceY();
+  if (Math.sqrt(dx * dx + dy * dy) >= SOURCE_RADIUS + TEST_RADIUS + 4) {
+    state.testX = Math.max(TEST_RADIUS + 2, Math.min(fw - TEST_RADIUS - 4, x));
+    state.testY = Math.max(TEST_RADIUS + 2, Math.min(cssHeight() - TEST_RADIUS - 2, y));
+  }
+  draw();
+}
+
 canvas.addEventListener('mousedown', e => {
   if (e.button !== 0) return;
   const { x, y } = canvasPoint(e);
@@ -535,21 +540,30 @@ canvas.addEventListener('mousedown', e => {
 });
 
 canvas.addEventListener('mousemove', e => {
-  if (!state.drag) return;
   const { x, y } = canvasPoint(e);
-  const fw = fieldWidth();
-  // keep test point in the field area, clear of source charge
-  const dx = x - sourceX(), dy = y - sourceY();
-  const dist = Math.sqrt(dx * dx + dy * dy);
-  if (dist >= SOURCE_RADIUS + TEST_RADIUS + 4) {
-    state.testX = Math.max(TEST_RADIUS + 2, Math.min(fw - TEST_RADIUS - 4, x));
-    state.testY = Math.max(TEST_RADIUS + 2, Math.min(cssHeight() - TEST_RADIUS - 2, y));
+  if (state.drag) {
+    applyDragMove(x, y);
+  } else {
+    canvas.style.cursor = hitTestPoint(x, y) ? 'grab' : 'default';
   }
-  draw();
 });
 
 canvas.addEventListener('mouseup',    () => { state.drag = false; canvas.classList.remove('dragging'); });
 canvas.addEventListener('mouseleave', () => { state.drag = false; canvas.classList.remove('dragging'); });
+
+// Touch support
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const { x, y } = canvasPoint(e.touches[0]);
+  if (hitTestPoint(x, y)) state.drag = true;
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (state.drag) applyDragMove(...Object.values(canvasPoint(e.touches[0])));
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => { state.drag = false; });
 
 /* ── Init ── */
 window.addEventListener('resize', resizeCanvas);
