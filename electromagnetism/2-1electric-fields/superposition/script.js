@@ -161,7 +161,8 @@ function drawCharge(ch, idx, isTest) {
   ctx.font = `bold 13px "Trebuchet MS", sans-serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
-  ctx.fillText(`q${idx + 1}`, x, y + r + 5);
+  const SUB = ['₁', '₂', '₃'];
+  ctx.fillText(`q${SUB[idx] ?? idx + 1}`, x, y + r + 5);
 }
 
 function arrowHead(x, y, angle, size, color) {
@@ -234,7 +235,8 @@ function draw() {
     // Individual force arrows
     forceVecs.forEach(({ fx, fy, srcIdx }, si) => {
       const col = si === 0 ? COLORS.force0 : COLORS.force1;
-      const lbl = `F${srcIdx + 1}${testIdx + 1}`;
+      const SUB = ['₁', '₂', '₃'];
+      const lbl = `F${SUB[srcIdx] ?? srcIdx + 1}${SUB[testIdx] ?? testIdx + 1}`;
       drawForceArrow(test.x, test.y, fx * scale, fy * scale, col, lbl);
     });
 
