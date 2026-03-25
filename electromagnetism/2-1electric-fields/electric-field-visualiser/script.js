@@ -602,7 +602,7 @@ function applyParallelPlatesPreset() {
   state.charges = [];
   state.selectedId = null;
 
-  const numPerPlate = 7;
+  const numPerPlate = 13;
   const xStart = 155;
   const xEnd = 805;
   const yPositive = 182;
