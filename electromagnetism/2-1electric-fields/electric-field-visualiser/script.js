@@ -19,7 +19,8 @@ let nextId = 1;
 const state = {
   charges: [],       // { id, x, y, sign, magnitude }
   selectedId: null,
-  mode: 'arrows',    // 'arrows' | 'lines'
+  mode: 'arrows',    // 'arrows' | 'lines' | 'both'
+  preset: 'empty',   // 'empty' | 'plates'
 };
 
 // ─── DOM refs ─────────────────────────────────────────────────────────────────
@@ -315,7 +316,52 @@ function drawLineArrowhead(points) {
   ctx.restore();
 }
 
+function drawTracedLine(points) {
+  if (points.length < 2) return;
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  for (let j = 1; j < points.length; j++) {
+    ctx.lineTo(points[j].x, points[j].y);
+  }
+  ctx.strokeStyle = 'rgba(21, 48, 77, 0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.restore();
+  drawLineArrowhead(points);
+}
+
+// For parallel plates: seed from a uniform horizontal line just inside the
+// positive plate so lines are evenly spaced rather than clustered per charge.
+function drawPlatesFieldLines() {
+  const positives = state.charges.filter((c) => c.sign === '+');
+  const negatives = state.charges.filter((c) => c.sign === '-');
+  if (positives.length === 0 || negatives.length === 0) return;
+
+  const posY = positives.reduce((sum, c) => sum + c.y, 0) / positives.length;
+  const negY = negatives.reduce((sum, c) => sum + c.y, 0) / negatives.length;
+  const direction = posY < negY ? 1 : -1;
+
+  const xCoords = positives.map((c) => c.x).sort((a, b) => a - b);
+  const xMin = xCoords[0];
+  const xMax = xCoords[xCoords.length - 1];
+
+  const seedY = posY + direction * (CHARGE_RADIUS + 7);
+  const LINE_SPACING = 25; // px between seed points
+  const numSeeds = Math.round((xMax - xMin) / LINE_SPACING) + 1;
+
+  for (let i = 0; i < numSeeds; i++) {
+    const sx = xMin + (i / (numSeeds - 1)) * (xMax - xMin);
+    drawTracedLine(traceFieldLine(sx, seedY, direction));
+  }
+}
+
 function drawFieldLines() {
+  if (state.preset === 'plates') {
+    drawPlatesFieldLines();
+    return;
+  }
+
   const positiveCharges = state.charges.filter((c) => c.sign === '+');
   const negativeCharges = state.charges.filter((c) => c.sign === '-');
 
@@ -323,32 +369,15 @@ function drawFieldLines() {
   // charges and trace backward — lines emerge from them as if they were sources.
   const seedCharges = positiveCharges.length > 0 ? positiveCharges : negativeCharges;
   const direction = positiveCharges.length > 0 ? 1 : -1;
-
   const seedRadius = CHARGE_RADIUS + 7;
 
   for (const charge of seedCharges) {
     const numLines = Math.min(Math.round(BASE_LINES_PER_NC * charge.magnitude), 60);
-
     for (let i = 0; i < numLines; i++) {
       const angle = (2 * Math.PI * i) / numLines;
       const sx = charge.x + seedRadius * Math.cos(angle);
       const sy = charge.y + seedRadius * Math.sin(angle);
-
-      const points = traceFieldLine(sx, sy, direction);
-      if (points.length < 2) continue;
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(points[0].x, points[0].y);
-      for (let j = 1; j < points.length; j++) {
-        ctx.lineTo(points[j].x, points[j].y);
-      }
-      ctx.strokeStyle = 'rgba(21, 48, 77, 0.6)';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-      ctx.restore();
-
-      drawLineArrowhead(points);
+      drawTracedLine(traceFieldLine(sx, sy, direction));
     }
   }
 }
@@ -594,6 +623,7 @@ btnBoth.addEventListener('click', () => setMode('both'));
 
 function applyEmptyPreset() {
   state.charges = [];
+  state.preset = 'empty';
   setSelected(null);
   draw();
 }
@@ -615,6 +645,7 @@ function applyParallelPlatesPreset() {
     addCharge('-', x, yNegative);
   }
 
+  state.preset = 'plates';
   hideSelectedPanel();
   draw();
 }
