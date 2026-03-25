@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Superposition of Forces</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics — Topic 2: Electromagnetism</p>
+        <h1>Superposition of Forces</h1>
+        <p class="intro">
+          Click a charge to select it as the test charge, then explore the
+          individual forces and their vector sum using the tip-to-tail method.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="btn-show-forces" class="toggle-button" type="button" aria-pressed="false">
+          Show Forces
+        </button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Controls</h2>
+
+        <div class="control-group">
+          <label>Preset</label>
+          <select id="preset-select">
+            <option value="right-angle">Right-angle</option>
+            <option value="equilateral">Equilateral triangle</option>
+            <option value="collinear">Collinear</option>
+          </select>
+        </div>
+
+        <div class="mode-toggle-row">
+          <button id="btn-mode-explore" class="mode-btn active" type="button" aria-pressed="true">Explore</button>
+          <button id="btn-mode-custom" class="mode-btn" type="button" aria-pressed="false">Custom</button>
+        </div>
+
+        <!-- ── Charge 1 ── -->
+        <div class="control-group">
+          <label>Charge 1, \(q_1\)</label>
+          <div class="sign-row">
+            <button class="sign-btn positive active" id="q1-sign-pos" type="button" aria-pressed="true">+</button>
+            <button class="sign-btn negative" id="q1-sign-neg" type="button" aria-pressed="false">−</button>
+          </div>
+          <div id="q1-explore" class="explore-controls">
+            <input id="q1-log-slider" class="log-slider" type="range" min="-19" max="0" step="0.05" value="-6">
+          </div>
+          <div id="q1-custom" class="custom-controls is-hidden">
+            <input id="q1-mantissa-slider" type="range" min="1" max="9.99" step="0.01" value="1.00">
+            <div class="scientific-row">
+              <input id="q1-mantissa-input" type="number" min="1" max="9.99" step="0.01" value="1.00">
+              <span class="times-ten">&times; 10</span>
+              <input id="q1-exponent-input" type="number" min="-99" max="99" step="1" value="-6">
+            </div>
+          </div>
+          <p id="q1-display" class="value-display"></p>
+        </div>
+
+        <!-- ── Charge 2 ── -->
+        <div class="control-group">
+          <label>Charge 2, \(q_2\)</label>
+          <div class="sign-row">
+            <button class="sign-btn positive" id="q2-sign-pos" type="button" aria-pressed="false">+</button>
+            <button class="sign-btn negative active" id="q2-sign-neg" type="button" aria-pressed="true">−</button>
+          </div>
+          <div id="q2-explore" class="explore-controls">
+            <input id="q2-log-slider" class="log-slider" type="range" min="-19" max="0" step="0.05" value="-6">
+          </div>
+          <div id="q2-custom" class="custom-controls is-hidden">
+            <input id="q2-mantissa-slider" type="range" min="1" max="9.99" step="0.01" value="1.00">
+            <div class="scientific-row">
+              <input id="q2-mantissa-input" type="number" min="1" max="9.99" step="0.01" value="1.00">
+              <span class="times-ten">&times; 10</span>
+              <input id="q2-exponent-input" type="number" min="-99" max="99" step="1" value="-6">
+            </div>
+          </div>
+          <p id="q2-display" class="value-display"></p>
+        </div>
+
+        <!-- ── Charge 3 (test charge default) ── -->
+        <div class="control-group">
+          <label>Charge 3, \(q_3\)</label>
+          <div class="sign-row">
+            <button class="sign-btn positive active" id="q3-sign-pos" type="button" aria-pressed="true">+</button>
+            <button class="sign-btn negative" id="q3-sign-neg" type="button" aria-pressed="false">−</button>
+          </div>
+          <div id="q3-explore" class="explore-controls">
+            <input id="q3-log-slider" class="log-slider" type="range" min="-19" max="0" step="0.05" value="-6">
+          </div>
+          <div id="q3-custom" class="custom-controls is-hidden">
+            <input id="q3-mantissa-slider" type="range" min="1" max="9.99" step="0.01" value="1.00">
+            <div class="scientific-row">
+              <input id="q3-mantissa-input" type="number" min="1" max="9.99" step="0.01" value="1.00">
+              <span class="times-ten">&times; 10</span>
+              <input id="q3-exponent-input" type="number" min="-99" max="99" step="1" value="-6">
+            </div>
+          </div>
+          <p id="q3-display" class="value-display"></p>
+        </div>
+
+        <div class="readout-grid">
+          <div class="readout-card">
+            <span class="readout-label">Coulomb's constant</span>
+            <span class="readout-value">\(k = 8.99 \times 10^{9}\,\mathrm{N\,m^2\,C^{-2}}\)</span>
+          </div>
+          <div class="readout-card">
+            <span id="readout-f1-label" class="readout-label">Force from q₁ on test</span>
+            <span id="readout-f1" class="readout-value">—</span>
+          </div>
+          <div class="readout-card">
+            <span id="readout-f2-label" class="readout-label">Force from q₂ on test</span>
+            <span id="readout-f2" class="readout-value">—</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Resultant force</span>
+            <span id="readout-fnet" class="readout-value">—</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap" id="canvas-wrap">
+          <canvas id="simulation-canvas" width="960" height="560" aria-label="Superposition of forces canvas"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
