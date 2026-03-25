@@ -241,10 +241,18 @@ input[type="number"] {
 
 .scientific-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto 80px;
+  grid-template-columns: minmax(0, 1fr) auto 58px;
   gap: 0.4rem;
-  align-items: center;
+  align-items: end;
   margin-top: 0.3rem;
+}
+
+.exponent-input {
+  font-size: 0.78rem !important;
+  padding: 0.3rem 0.35rem !important;
+  border-radius: 9px !important;
+  align-self: start;
+  margin-top: 2px;
 }
 
 .times-ten {

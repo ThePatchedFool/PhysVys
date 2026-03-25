@@ -2,6 +2,8 @@
 
 /* ── Constants ── */
 const K = 8.99e9;
+const SUPERSCRIPT = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+function toSuperscript(n) { return String(n).split('').map(c => SUPERSCRIPT[c] ?? c).join(''); }
 const CANVAS_W = 960;
 const CANVAS_H = 560;
 const CHARGE_RADIUS = 26;
@@ -88,14 +90,14 @@ function formatSci(val) {
   if (val === 0) return '0 C';
   const exp = Math.floor(Math.log10(Math.abs(val)));
   const man = val / Math.pow(10, exp);
-  return `${man.toFixed(2)} × 10^${exp} C`;
+  return `${man.toFixed(2)} × 10${toSuperscript(exp)} C`;
 }
 
 function formatSciN(val, unit) {
   if (!Number.isFinite(val) || val === 0) return '0 ' + unit;
   const exp = Math.floor(Math.log10(Math.abs(val)));
   const man = val / Math.pow(10, exp);
-  return `${man.toFixed(2)} × 10^${exp} ${unit}`;
+  return `${man.toFixed(2)} × 10${toSuperscript(exp)} ${unit}`;
 }
 
 function formatAngle(rad) {
@@ -329,7 +331,7 @@ function updateChargeDisplay(idx) {
   if (el) {
     const exp = Math.floor(Math.log10(Math.abs(val)));
     const man = val / Math.pow(10, exp);
-    el.textContent = `${man.toFixed(2)} × 10^${exp} C`;
+    el.textContent = `${man.toFixed(2)} × 10${toSuperscript(exp)} C`;
   }
 }
 
