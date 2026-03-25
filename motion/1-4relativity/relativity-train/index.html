@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relativity Train</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+
+  <!-- ── Modal overlays (one per step) ──────────────────────── -->
+
+  <div class="modal-overlay" id="modal-1">
+    <div class="modal-card">
+      <div class="modal-step-badge">Step 1</div>
+      <h2>Synchronising the Clocks</h2>
+      <p>Before making any measurements we must agree on synchronised clocks in each frame.</p>
+      <ol>
+        <li><strong>Station clocks:</strong> A flash is set off midway between the two station clocks. The two photons travel equal distances and arrive simultaneously. We set both clocks to the same reading when the photons arrive. ✓</li>
+        <li><strong>Train clocks:</strong> We repeat the exact same procedure on the moving train — a flash from the midpoint of the train. Because we cannot tell by any experiment whether we are moving, we <em>must</em> use the same rule. The front clock must be set <em>back</em> relative to a naive guess, so that both photons arrive at the same clock reading. The train clocks are now synchronised <em>in the train's own frame</em>.</li>
+      </ol>
+      <p class="modal-note">As a check: measure the travel time of a photon between adjacent clocks in each direction. The result is the same each way — confirming that the speed of light is constant in every frame.</p>
+      <button class="modal-close" data-modal="modal-1">Got it — show me Step 1</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-2">
+    <div class="modal-card">
+      <div class="modal-step-badge">Step 2</div>
+      <h2>Length Measurements</h2>
+      <p>We place a standard 100 cm metre stick on the train and measure its length from the station, and vice versa.</p>
+      <ol>
+        <li><strong>Station measures the train's stick:</strong> Two observers in the station frame drop arrow markers at the positions of each end of the moving stick <em>simultaneously</em> (by the station clocks). The gap between the markers gives the station's measurement.</li>
+        <li><strong>Train measures the station's stick:</strong> Two observers on the train drop markers at the positions of each end of the stationary stick <em>simultaneously</em> (by the train clocks). The gap gives the train's measurement.</li>
+      </ol>
+      <p class="modal-note">Watch carefully — the two results are <strong>not the same</strong>. That discrepancy is the problem we fix in Steps 4 &amp; 5.</p>
+      <button class="modal-close" data-modal="modal-2">Got it — show me Step 2</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-3">
+    <div class="modal-card">
+      <div class="modal-step-badge">Step 3</div>
+      <h2>Violation of Einstein's Postulates</h2>
+      <p>Comparing the two measurements from Step 2 reveals an asymmetry:</p>
+      <ul>
+        <li>From the <strong>station</strong>: the train's metre stick measures <em>the same</em> as the station's.</li>
+        <li>From the <strong>train</strong>: the station's metre stick measures <em>shorter</em> than the train's.</li>
+      </ul>
+      <p>This asymmetry means we <em>can</em> tell who is "really" moving — which directly <strong>violates Einstein's second postulate</strong> (the principle of relativity: the laws of physics are the same in all inertial frames).</p>
+      <p class="modal-note">Something must be wrong. We accepted the postulates at the start, so we must change our assumptions about lengths and times — not abandon the postulates.</p>
+      <button class="modal-close" data-modal="modal-3">Got it — show me Step 3</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-4">
+    <div class="modal-card">
+      <div class="modal-step-badge">Step 4</div>
+      <h2>Invoking Length Contraction</h2>
+      <p>At \(\beta = v/c = 0.6\), the Lorentz factor is \(\gamma = 1/\sqrt{1-\beta^2} = 1.25\).</p>
+      <p>We replace the train's metre stick with one that is <strong>contracted</strong> by a factor of \(1/\gamma = 0.8\) — that is, <strong>4/5 of the station's metre stick</strong>.</p>
+      <p>This is length contraction: objects moving relative to an observer appear shortened along the direction of motion by the factor \(1/\gamma\).</p>
+      <p class="modal-note">Watch the metre stick on the train shrink to 4/5 of its former length. Now we are ready to repeat the measurements.</p>
+      <button class="modal-close" data-modal="modal-4">Got it — show me Step 4</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-5">
+    <div class="modal-card">
+      <div class="modal-step-badge">Step 5</div>
+      <h2>Symmetry Restored</h2>
+      <p>With the contracted metre stick on the train, we repeat all measurements:</p>
+      <ul>
+        <li>The <strong>station</strong> measures the train's stick as <em>4/5 of the station metre</em>. ✓</li>
+        <li>The <strong>train</strong> measures the station's stick as <em>4/5 of the train metre</em>. ✓</li>
+      </ul>
+      <p>Perfect symmetry — neither frame can claim to be "truly" at rest. Both see the other's metre stick as contracted by the same factor.</p>
+      <p><strong>Time dilation follows too:</strong> measuring the speed of light using the contracted sticks now shows a discrepancy in <em>time</em>. We must slow the train's clocks to 4/5 of the station rate — after which both frames measure the same speed of light, and each sees the other's clocks running slow by the same factor.</p>
+      <p class="modal-note">Einstein's two postulates are satisfied. Length contraction and time dilation are not arbitrary — they are the <em>necessary consequences</em> of taking the postulates seriously.</p>
+      <button class="modal-close" data-modal="modal-5">Got it — show me Step 5</button>
+    </div>
+  </div>
+
+  <!-- ── Main page ───────────────────────────────────────────── -->
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics — Motion 1.4</p>
+        <h1>Relativity Train</h1>
+        <p class="intro">
+          A model train moving at \(\beta = 0.6c\) carries three clocks and a metre stick past two station clocks.
+          Work through the five steps to discover why length contraction and time dilation are
+          <em>necessary</em> consequences of Einstein's postulates.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="btn-play"  class="toggle-button secondary-button" type="button">Pause</button>
+        <button id="btn-reset" class="toggle-button secondary-button" type="button">Reset</button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Steps</h2>
+
+        <div class="step-list">
+          <button class="step-btn active" data-step="1" type="button">
+            <span class="step-num">1</span>
+            <span class="step-label">Synchronise Clocks</span>
+          </button>
+          <button class="step-btn" data-step="2" type="button">
+            <span class="step-num">2</span>
+            <span class="step-label">Length Measurements</span>
+          </button>
+          <button class="step-btn" data-step="3" type="button">
+            <span class="step-num">3</span>
+            <span class="step-label">Violation Found</span>
+          </button>
+          <button class="step-btn" data-step="4" type="button">
+            <span class="step-num">4</span>
+            <span class="step-label">Length Contraction</span>
+          </button>
+          <button class="step-btn" data-step="5" type="button">
+            <span class="step-num">5</span>
+            <span class="step-label">Symmetry Restored</span>
+          </button>
+        </div>
+
+        <div class="step-nav">
+          <button id="btn-prev" class="toggle-button secondary-button" type="button" disabled>← Prev</button>
+          <button id="btn-next" class="toggle-button" type="button">Next →</button>
+        </div>
+
+        <div class="marker-section">
+          <h3 class="marker-heading">Position Markers</h3>
+          <p class="marker-hint">Station (blue): mark ends of train stick. Train (orange): mark ends of station stick.</p>
+          <div class="marker-row">
+            <button id="btn-mark-a" class="marker-btn station-marker" type="button" title="Mark left end of train stick (station frame)">A</button>
+            <button id="btn-mark-b" class="marker-btn station-marker" type="button" title="Mark right end of train stick (station frame)">B</button>
+            <button id="btn-mark-c" class="marker-btn train-marker"   type="button" title="Mark left end of station stick (train frame)">C</button>
+            <button id="btn-mark-d" class="marker-btn train-marker"   type="button" title="Mark right end of station stick (train frame)">D</button>
+            <button id="btn-clear-markers" class="marker-btn clear-marker" type="button" title="Clear all markers">✕</button>
+          </div>
+        </div>
+
+        <div class="readout-grid">
+          <div class="readout-card">
+            <span class="readout-label">Train velocity</span>
+            <span class="readout-value">\(\beta = v/c = 0.6\)</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Lorentz factor</span>
+            <span class="readout-value">\(\gamma = 1.25\)</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Length contraction</span>
+            <span id="readout-contraction" class="readout-value muted">not yet applied</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Time dilation</span>
+            <span id="readout-dilation" class="readout-value muted">not yet applied</span>
+          </div>
+          <div class="readout-card" id="card-step-note">
+            <span class="readout-label">Current step</span>
+            <span id="readout-step-note" class="readout-value"></span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap">
+          <canvas id="simulation-canvas" width="960" height="560"
+                  aria-label="Relativity Train simulation"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

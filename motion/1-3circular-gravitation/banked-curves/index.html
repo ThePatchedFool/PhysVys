@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banked Curves</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.3</p>
+      <h1>Banked Curves</h1>
+      <p class="intro">
+        On a flat curve, friction alone keeps a vehicle on the road. Banking the road tilts the
+        normal force inward, reducing the reliance on friction — and at just the right speed,
+        eliminating it entirely.
+      </p>
+    </div>
+  </section>
+
+  <section class="layout">
+    <!-- ── Sidebar ──────────────────────────────────────────── -->
+    <aside class="panel controls">
+      <h2>Controls</h2>
+
+      <!-- View -->
+      <div class="control-group">
+        <label>View</label>
+        <div class="seg-control cols-2" id="seg-view">
+          <button class="seg-btn active" data-val="cross"    type="button">Cross-section</button>
+          <button class="seg-btn"        data-val="overhead" type="button">Overhead</button>
+        </div>
+      </div>
+
+      <!-- Surface -->
+      <div class="control-group">
+        <label>Road surface</label>
+        <div class="seg-control cols-2" id="seg-surface">
+          <button class="seg-btn active" data-val="flat"   type="button">Flat curve</button>
+          <button class="seg-btn"        data-val="banked" type="button">Banked curve</button>
+        </div>
+      </div>
+
+      <!-- Speed (banked only) -->
+      <div class="control-group" id="group-speed" style="display:none">
+        <label>Speed</label>
+        <div class="seg-control cols-3" id="seg-speed">
+          <button class="seg-btn"        data-val="slow"  type="button">Too slow</button>
+          <button class="seg-btn active" data-val="ideal" type="button">Ideal speed</button>
+          <button class="seg-btn"        data-val="fast"  type="button">Too fast</button>
+        </div>
+      </div>
+
+      <!-- Vector toggles (view-specific) -->
+      <div class="control-group" id="group-vectors">
+        <label>Show / hide vectors</label>
+
+        <div class="vector-toggles" id="toggles-cross">
+          <button class="vec-btn active" data-vec="weight"   type="button"><span class="vec-dot" style="background:#dc2626"></span>Weight <em>W</em></button>
+          <button class="vec-btn active" data-vec="normal"   type="button"><span class="vec-dot" style="background:#2563eb"></span>Normal force <em>N</em></button>
+          <button class="vec-btn active" data-vec="friction" type="button" id="btn-vec-friction"><span class="vec-dot" style="background:#d97706"></span>Friction <em>F<sub>f</sub></em></button>
+          <button class="vec-btn active" data-vec="netForce" type="button"><span class="vec-dot" style="background:#0d9488"></span>Net centripetal <em>F<sub>c</sub></em></button>
+        </div>
+
+        <div class="vector-toggles" id="toggles-overhead" style="display:none">
+          <button class="vec-btn active" data-vec="velocity" type="button"><span class="vec-dot" style="background:#15304d"></span>Velocity <em>v</em></button>
+          <button class="vec-btn active" data-vec="netForce" type="button"><span class="vec-dot" style="background:#0d9488"></span>Centripetal force <em>F<sub>c</sub></em></button>
+        </div>
+      </div>
+
+      <!-- Explanation cards -->
+      <div class="explain-card" data-surface="flat" data-speed="any">
+        <strong>Flat curve:</strong> The normal force acts straight up, balancing gravity.
+        All of the centripetal force must come from <strong>friction</strong> between the tyres
+        and road. If the car goes too fast, friction is not strong enough and the car skids outward.
+      </div>
+
+      <div class="explain-card hidden" data-surface="banked" data-speed="ideal">
+        <strong>Banked curve — ideal speed:</strong> The road is tilted inward, so the normal force
+        tilts with it. Its horizontal component points toward the centre and provides
+        <em>exactly</em> the centripetal force needed. <strong>No friction is required.</strong>
+        This is why banked tracks are safer — the banking does the work.
+      </div>
+
+      <div class="explain-card hidden" data-surface="banked" data-speed="slow">
+        <strong>Banked curve — too slow:</strong> Less centripetal force is needed, but the
+        horizontal component of N still points inward. The car tends to slide
+        <em>down</em> the bank. Friction acts <em>up</em> the slope, partially opposing the
+        inward push. The car stays on the road, but friction is needed.
+      </div>
+
+      <div class="explain-card hidden" data-surface="banked" data-speed="fast">
+        <strong>Banked curve — too fast:</strong> More centripetal force is needed than N alone
+        provides. The car tends to slide <em>up</em> the bank. Friction acts <em>down</em> the
+        slope, adding to the inward (centripetal) push. At extreme speeds, even this extra
+        friction is not enough and the car slides outward.
+      </div>
+    </aside>
+
+    <!-- ── Canvas ────────────────────────────────────────────── -->
+    <section class="panel visual-panel">
+      <div class="canvas-wrap">
+        <canvas id="sim-canvas" width="960" height="560"
+                aria-label="Banked curves simulation"></canvas>
+      </div>
+    </section>
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

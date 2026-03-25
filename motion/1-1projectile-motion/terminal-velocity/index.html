@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terminal Velocity — Projectile Motion</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.1</p>
+      <h1>Terminal Velocity</h1>
+      <p class="intro">
+        Watch a falling object accelerate under gravity while drag builds — until
+        the two forces balance and velocity becomes constant.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <button id="btn-reset" class="action-btn action-btn--secondary" type="button">Reset</button>
+    </div>
+  </section>
+
+  <section class="layout">
+
+    <!-- ── Sidebar ───────────────────────────────────────── -->
+    <aside class="panel controls">
+
+      <!-- Object group -->
+      <div class="control-group">
+        <label>Object type</label>
+        <div class="seg-control cols-2" id="seg-group">
+          <button class="seg-btn active" data-val="skydiver" type="button">Skydiver</button>
+          <button class="seg-btn"        data-val="other"    type="button">Other</button>
+        </div>
+      </div>
+
+      <!-- Skydiver presets -->
+      <div class="control-group" id="grp-skydiver">
+        <label>Preset</label>
+        <div class="seg-control cols-2" id="seg-skydiver">
+          <button class="seg-btn active" data-val="spread"    type="button">Spread-eagle</button>
+          <button class="seg-btn"        data-val="headdown"  type="button">Head-down</button>
+          <button class="seg-btn"        data-val="wingsuit"  type="button">Wingsuit</button>
+          <button class="seg-btn"        data-val="parachute" type="button">Parachute</button>
+        </div>
+      </div>
+
+      <!-- Other presets -->
+      <div class="control-group hidden" id="grp-other">
+        <label>Preset</label>
+        <div class="seg-control cols-2" id="seg-other">
+          <button class="seg-btn active" data-val="feather"  type="button">Feather</button>
+          <button class="seg-btn"        data-val="raindrop" type="button">Raindrop</button>
+          <button class="seg-btn"        data-val="tennis"   type="button">Tennis ball</button>
+          <button class="seg-btn"        data-val="bowling"  type="button">Bowling ball</button>
+        </div>
+      </div>
+
+      <!-- Deploy chute (skydiver group only) -->
+      <div class="control-group" id="grp-deploy">
+        <button id="btn-deploy" class="action-btn deploy-btn" type="button" disabled>
+          Deploy Chute
+        </button>
+      </div>
+
+      <!-- Environment (sets air density) -->
+      <div class="control-group">
+        <label>Environment</label>
+        <div class="seg-control cols-2" id="seg-env">
+          <button class="seg-btn active" data-val="sealevel" type="button">Sea level</button>
+          <button class="seg-btn"        data-val="highalt"  type="button">High alt.</button>
+          <button class="seg-btn"        data-val="strato"   type="button">Strato.</button>
+          <button class="seg-btn"        data-val="mars"     type="button">Mars</button>
+        </div>
+      </div>
+
+      <!-- Gravity -->
+      <div class="control-group">
+        <label>Gravity</label>
+        <div class="seg-control cols-3" id="seg-gravity">
+          <button class="seg-btn active" data-val="earth" type="button">Earth</button>
+          <button class="seg-btn"        data-val="moon"  type="button">Moon</button>
+          <button class="seg-btn"        data-val="mars"  type="button">Mars</button>
+        </div>
+      </div>
+
+      <!-- Preset / Custom toggle -->
+      <div class="control-group">
+        <label>Parameters</label>
+        <div class="seg-control cols-2" id="seg-params">
+          <button class="seg-btn active" data-val="preset" type="button">Preset</button>
+          <button class="seg-btn"        data-val="custom" type="button">Custom</button>
+        </div>
+      </div>
+
+      <!-- Custom sliders (hidden until custom mode) -->
+      <div id="grp-custom" class="hidden">
+        <div class="control-group">
+          <label>
+            Drag coeff. C<sub>d</sub>
+            <span class="label-value">
+              <input class="num-input" id="num-cd" type="number" min="0.05" max="2.0" step="0.05" value="1.0">
+            </span>
+          </label>
+          <input class="slider" id="slider-cd" type="range" min="0.05" max="2.0" step="0.05" value="1.0">
+        </div>
+        <div class="control-group">
+          <label>
+            Area A
+            <span class="label-value">
+              <input class="num-input" id="num-area" type="number" min="0.001" max="2.0" step="0.001" value="0.70"> m²
+            </span>
+          </label>
+          <input class="slider" id="slider-area" type="range" min="0.001" max="2.0" step="0.001" value="0.70">
+        </div>
+        <div class="control-group">
+          <label>
+            Mass m
+            <span class="label-value">
+              <input class="num-input" id="num-mass" type="number" min="0.001" max="100" step="0.1" value="80"> kg
+            </span>
+          </label>
+          <input class="slider" id="slider-mass" type="range" min="0.001" max="100" step="0.1" value="80">
+        </div>
+      </div>
+
+      <!-- Drop button -->
+      <div class="control-group">
+        <button id="btn-drop" class="action-btn fire-btn" type="button">Drop!</button>
+      </div>
+
+      <!-- Key idea -->
+      <details class="explain-details">
+        <summary>Key idea</summary>
+        <p>
+          Drag force F<sub>d</sub> = ½ρC<sub>d</sub>Av² increases with speed. As the
+          object accelerates downward, drag grows until it equals gravity mg — at that
+          point net force is zero and the object reaches terminal velocity
+          v<sub>T</sub> = √(2mg / ρC<sub>d</sub>A).
+        </p>
+      </details>
+
+    </aside>
+
+    <!-- ── Canvas ─────────────────────────────────────────── -->
+    <section class="panel visual-panel">
+      <div class="canvas-wrap">
+        <canvas id="sim-canvas" width="960" height="560"
+                aria-label="Terminal Velocity simulation"></canvas>
+      </div>
+    </section>
+
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

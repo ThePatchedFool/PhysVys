@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Length Contraction &amp; Time Dilation</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.4</p>
+      <h1>Length Contraction &amp; Time Dilation</h1>
+      <p class="intro">
+        Two scenarios show why the same event looks different depending on which frame you are in.
+        Identify the <em>proper</em> quantity in each case, then apply \(\gamma\) to find the other.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <button id="btn-play"  class="toggle-button secondary-button" type="button">Pause</button>
+      <button id="btn-reset" class="toggle-button secondary-button" type="button">Reset</button>
+    </div>
+  </section>
+
+  <section class="layout">
+    <!-- ── Sidebar ──────────────────────────────────────────── -->
+    <aside class="panel controls">
+      <h2>Controls</h2>
+
+      <!-- Scenario -->
+      <div class="control-group">
+        <label>Scenario</label>
+        <div class="seg-control cols-2" id="seg-scenario">
+          <button class="seg-btn active" data-val="muon" type="button">Muon Detection</button>
+          <button class="seg-btn"       data-val="ship" type="button">Earth → Neptune</button>
+        </div>
+      </div>
+
+      <!-- Frame -->
+      <div class="control-group">
+        <label>Reference frame</label>
+        <div class="seg-control cols-2" id="seg-frame">
+          <button class="seg-btn active" data-val="ground" type="button" id="btn-frame-ground">Earth frame</button>
+          <button class="seg-btn"        data-val="moving" type="button" id="btn-frame-moving">Muon frame</button>
+        </div>
+      </div>
+
+      <!-- Speed slider (ship scenario only) -->
+      <div class="control-group" id="group-speed">
+        <label>Speed \(\beta = v/c\)</label>
+        <div class="slider-row">
+          <input type="range" id="slider-beta" min="0.1" max="0.99" step="0.01" value="0.98">
+          <span class="slider-val" id="val-beta">0.98</span>
+        </div>
+      </div>
+
+      <!-- Readouts -->
+      <div class="readout-grid">
+        <div class="readout-card">
+          <span class="readout-label">Speed \(\beta = v/c\)</span>
+          <span class="readout-value" id="ro-beta">—</span>
+        </div>
+        <div class="readout-card">
+          <span class="readout-label">Lorentz factor \(\gamma\)</span>
+          <span class="readout-value" id="ro-gamma">—</span>
+        </div>
+        <div class="readout-card">
+          <span class="readout-label" id="ro-time-label">Time (this frame)</span>
+          <span class="readout-value" id="ro-time">—</span>
+        </div>
+        <div class="readout-card">
+          <span class="readout-label" id="ro-length-label">Length (this frame)</span>
+          <span class="readout-value" id="ro-length">—</span>
+        </div>
+      </div>
+
+      <!-- Why card — muon / ground -->
+      <div class="why-card" data-scenario="muon" data-frame="ground">
+        <strong>Earth frame:</strong> The muon travels the <em>full</em> 10 km atmosphere
+        (\(L_0\) — proper length, both ends at rest in this frame).
+        The muon's internal clock runs slow, so we observe it surviving longer than its lab
+        half-life (<em>dilated</em> time \(t = \gamma\,\tau_0\)).
+      </div>
+
+      <!-- Why card — muon / moving -->
+      <div class="why-card hidden" data-scenario="muon" data-frame="moving">
+        <strong>Muon frame:</strong> The muon is at rest — it ticks its own <em>proper</em>
+        lifetime \(\tau_0 = 2.197\,\mu\text{s}\). The atmosphere rushes past, but its thickness
+        is <em>contracted</em> to \(L = L_0/\gamma\). Either way, the muon just barely reaches
+        sea level.
+      </div>
+
+      <!-- Why card — ship / ground -->
+      <div class="why-card hidden" data-scenario="ship" data-frame="ground">
+        <strong>Earth frame:</strong> Earth and Neptune are at rest, so the
+        Earth–Neptune distance is the <em>proper length</em> \(L_0 = 29.1\,\text{AU}\).
+        The ship's clocks run slow; we observe <em>dilated</em> travel time
+        \(t = L_0 / v = \gamma\,\tau_0\).
+      </div>
+
+      <!-- Why card — ship / moving -->
+      <div class="why-card hidden" data-scenario="ship" data-frame="moving">
+        <strong>Ship frame:</strong> The ship is at rest — it measures its own
+        <em>proper</em> travel time \(\tau_0 = t/\gamma\). Neptune rushes toward it, but the
+        Earth–Neptune gap is <em>contracted</em> to \(L = L_0/\gamma\), consistent with
+        \(\tau_0 = L/v\).
+      </div>
+    </aside>
+
+    <!-- ── Canvas ────────────────────────────────────────────── -->
+    <section class="panel visual-panel">
+      <div class="canvas-wrap">
+        <canvas id="sim-canvas" width="960" height="560"
+                aria-label="Length contraction and time dilation simulation"></canvas>
+      </div>
+    </section>
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

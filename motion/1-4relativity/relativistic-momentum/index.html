@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relativistic Momentum</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.4</p>
+      <h1>Relativistic Momentum</h1>
+      <p class="intro">
+        Classical physics predicts momentum grows linearly with speed.
+        Relativity says otherwise — and the difference explains why nothing with mass can ever reach \(c\).
+      </p>
+    </div>
+  </section>
+
+  <section class="layout">
+    <!-- ── Sidebar ──────────────────────────────────────────── -->
+    <aside class="panel controls">
+      <h2>Controls</h2>
+
+      <!-- Speed slider -->
+      <div class="control-group">
+        <label>Speed &nbsp; \(\beta = v/c\)</label>
+        <div class="slider-row">
+          <input type="range" id="slider-beta" min="0.01" max="0.99" step="0.01" value="0.80">
+          <span class="slider-val" id="val-beta">0.80</span>
+        </div>
+      </div>
+
+      <!-- Show / hide toggles -->
+      <div class="control-group">
+        <label>Show / hide</label>
+        <div class="vector-toggles">
+          <button class="vec-btn" data-key="classical" type="button">
+            <span class="vec-dot" style="background:#64748b"></span>Classical momentum
+          </button>
+          <button class="vec-btn" data-key="relativistic" type="button">
+            <span class="vec-dot" style="background:#0d9488"></span>Relativistic momentum
+          </button>
+          <button class="vec-btn" data-key="formula" type="button">
+            <span class="vec-dot" style="background:#0f766e"></span>Formula \(p = \gamma m_0 v\)
+          </button>
+          <button class="vec-btn" data-key="values" type="button">
+            <span class="vec-dot" style="background:#2563eb"></span>Values (\(\beta\), \(\gamma\), \(p\))
+          </button>
+          <button class="vec-btn" data-key="explanation" type="button">
+            <span class="vec-dot" style="background:#d97706"></span>Explanation
+          </button>
+        </div>
+      </div>
+
+      <!-- Explanation card (hidden by default) -->
+      <div class="explain-card hidden" id="why-card">
+        <strong>Why can't we reach \(c\)?</strong><br><br>
+        As \(v \to c\), the Lorentz factor \(\gamma \to \infty\), so relativistic
+        momentum \(p = \gamma m_0 v\) diverges. A constant force keeps adding
+        momentum at a steady rate — but each unit of extra momentum produces
+        less and less extra speed. Reaching \(v = c\) would require
+        <em>infinite</em> momentum, and therefore <em>infinite</em> energy.
+      </div>
+    </aside>
+
+    <!-- ── Canvas ────────────────────────────────────────────── -->
+    <section class="panel visual-panel">
+      <div class="canvas-wrap">
+        <canvas id="sim-canvas" width="960" height="560"
+                aria-label="Relativistic momentum graph"></canvas>
+      </div>
+    </section>
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

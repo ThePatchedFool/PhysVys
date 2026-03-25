@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impulse &amp; Change in Momentum</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.2</p>
+      <h1>Impulse &amp; Δp</h1>
+      <p class="intro">
+        A ball bounces elastically off a wall. Watch how the change in momentum
+        is always perpendicular to the wall, regardless of the angle of incidence.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <button id="btn-reset" class="action-btn" type="button">Reset</button>
+    </div>
+  </section>
+
+  <section class="layout">
+
+    <!-- ── Sidebar ──────────────────────────────────────── -->
+    <aside class="panel controls">
+
+      <!-- Triangle type -->
+      <div class="control-group">
+        <label>Δp triangle</label>
+        <div class="seg-control cols-3" id="seg-triangle">
+          <button class="seg-btn active" data-val="equilateral" type="button">
+            Equilateral<br><span class="seg-sub">60°</span>
+          </button>
+          <button class="seg-btn" data-val="right-angle" type="button">
+            Right-angle<br><span class="seg-sub">45°</span>
+          </button>
+          <button class="seg-btn" data-val="custom" type="button">
+            Custom
+          </button>
+        </div>
+        <div id="custom-angle-row" class="sci-input-row" style="display:none; margin-top:0.5rem">
+          <label style="font-size:0.85rem; font-weight:600; white-space:nowrap">Angle of incidence</label>
+          <input type="number" id="custom-angle" class="sci-exp"
+                 min="0" max="89" step="1" value="30">
+          <span class="sci-unit">°</span>
+        </div>
+      </div>
+
+      <!-- Mass -->
+      <div class="control-group">
+        <label>Mass</label>
+        <div class="sci-input-row">
+          <input type="number" id="mass-mantissa" class="sci-mantissa"
+                 min="1" max="9.99" step="0.01" value="1">
+          <span class="sci-times">× 10</span>
+          <input type="number" id="mass-exp" class="sci-exp"
+                 min="-31" max="31" step="1" value="0">
+          <span class="sci-unit">kg</span>
+        </div>
+      </div>
+
+      <!-- Speed -->
+      <div class="control-group">
+        <label>Speed</label>
+        <div class="sci-input-row">
+          <input type="number" id="speed-mantissa" class="sci-mantissa"
+                 min="1" max="9.99" step="0.01" value="1">
+          <span class="sci-times">× 10</span>
+          <input type="number" id="speed-exp" class="sci-exp"
+                 min="-8" max="8" step="1" value="0">
+          <span class="sci-unit">m s⁻¹</span>
+        </div>
+      </div>
+
+      <!-- Angles toggle -->
+      <div class="control-group">
+        <label>Angles</label>
+        <div class="seg-control cols-2" id="seg-angles">
+          <button class="seg-btn active" data-val="hide" type="button">Hide</button>
+          <button class="seg-btn" data-val="show" type="button">Show</button>
+        </div>
+      </div>
+
+      <!-- Impulse calculation toggle -->
+      <div class="control-group">
+        <label>Impulse calculation</label>
+        <div class="seg-control cols-2" id="seg-impulse">
+          <button class="seg-btn active" data-val="hide" type="button">Hide</button>
+          <button class="seg-btn" data-val="show" type="button">Show</button>
+        </div>
+      </div>
+
+      <!-- Magnitudes toggle -->
+      <div class="control-group">
+        <label>Magnitudes</label>
+        <div class="seg-control cols-2" id="seg-magnitudes">
+          <button class="seg-btn active" data-val="hide" type="button">Hide</button>
+          <button class="seg-btn" data-val="show" type="button">Show</button>
+        </div>
+      </div>
+
+      <!-- Explanation card (collapsed by default) -->
+      <details class="explain-details">
+        <summary>Key idea</summary>
+        Only the component of momentum <em>perpendicular</em> to the wall
+        changes. The parallel component is unchanged. So Δp always points
+        directly away from (or into) the wall, no matter the angle of approach.
+      </details>
+
+    </aside>
+
+    <!-- ── Canvas ──────────────────────────────────────── -->
+    <section class="panel visual-panel">
+      <div class="canvas-wrap">
+        <canvas id="sim-canvas" width="960" height="560"
+                aria-label="Ball bouncing off a wall — impulse diagram"></canvas>
+      </div>
+    </section>
+
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

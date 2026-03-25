@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uniform Circular Motion</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics</p>
+        <h1>Uniform Circular Motion</h1>
+        <p class="intro">
+          Swap between different teaching modes, set the known variables, and reveal the hidden quantities only when you are ready.
+          The model uses \(v = \frac{2\pi r}{T}\), \(a = \frac{v^2}{r}\), and \(F_c = ma\).
+        </p>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Controls</h2>
+
+        <div class="control-group">
+          <label for="mode-select">Mode</label>
+          <select id="mode-select">
+            <option value="find-acceleration-force">Set radius, period, mass</option>
+            <option value="find-radius">Set acceleration, velocity, mass</option>
+            <option value="find-period">Set radius, velocity, mass</option>
+            <option value="find-velocity">Set radius, period</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <span class="section-label">Vector Toggles</span>
+          <div id="vector-toggles" class="toggle-grid"></div>
+        </div>
+
+        <div id="active-controls"></div>
+
+        <div class="readout-grid">
+          <div class="readout-card">
+            <span class="readout-label">Current Equations</span>
+            <span id="equation-text" class="readout-value math-value"></span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Mode Focus</span>
+            <span id="mode-summary" class="readout-value"></span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap">
+          <canvas id="simulation-canvas" width="960" height="620" aria-label="Uniform circular motion model"></canvas>
+        </div>
+        <section class="result-panel">
+          <h2>Hidden Values</h2>
+          <div id="results" class="result-grid"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+

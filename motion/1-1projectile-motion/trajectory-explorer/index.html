@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trajectory Explorer — Projectile Motion</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.1</p>
+      <h1>Trajectory Explorer</h1>
+      <p class="intro" id="hero-intro">
+        A projectile moves freely under gravity. Its horizontal velocity stays
+        constant while its vertical velocity changes at a steady rate — the two
+        components are completely independent.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <button id="btn-reset" class="action-btn action-btn--secondary" type="button">Reset</button>
+    </div>
+  </section>
+
+  <section class="layout">
+
+    <!-- ── Sidebar ───────────────────────────────────────── -->
+    <aside class="panel controls">
+
+      <!-- Mode selector -->
+      <div class="control-group">
+        <label>Mode</label>
+        <div class="seg-control cols-3" id="seg-mode">
+          <button class="seg-btn active" data-val="single" type="button">Single<br><span class="seg-sub">launch</span></button>
+          <button class="seg-btn" data-val="sweep" type="button">Angle<br><span class="seg-sub">sweep</span></button>
+          <button class="seg-btn" data-val="strobe" type="button">Strobo<br><span class="seg-sub">scopic</span></button>
+        </div>
+      </div>
+
+      <!-- Launch speed -->
+      <div class="control-group">
+        <label>
+          Launch speed
+          <span class="label-value"><input class="num-input" id="num-speed" type="number" min="5" max="50" step="1" value="25"> m/s</span>
+        </label>
+        <input class="slider" id="slider-speed" type="range" min="5" max="50" step="1" value="25">
+      </div>
+
+      <!-- Launch angle -->
+      <div class="control-group">
+        <label>
+          Launch angle
+          <span class="label-value"><input class="num-input" id="num-angle" type="number" min="0" max="90" step="1" value="45"> °</span>
+        </label>
+        <input class="slider" id="slider-angle" type="range" min="0" max="90" step="1" value="45">
+      </div>
+
+      <!-- Fire button -->
+      <div class="control-group">
+        <button id="btn-fire" class="action-btn fire-btn" type="button">Fire!</button>
+      </div>
+
+      <!-- Sweep count (sweep mode only) -->
+      <div class="control-group hidden" id="sweep-controls">
+        <label>
+          Trajectories
+          <span class="label-value" id="sweep-count-label">5</span>
+        </label>
+        <input class="slider" id="slider-sweep" type="range" min="3" max="11" step="2" value="5">
+      </div>
+
+      <!-- Vector toggle (single mode only) -->
+      <div class="control-group hidden" id="vector-controls">
+        <label>Velocity components</label>
+        <div class="seg-control cols-2" id="seg-vectors">
+          <button class="seg-btn active" data-val="hide" type="button">Hide</button>
+          <button class="seg-btn" data-val="show" type="button">Show</button>
+        </div>
+      </div>
+
+      <!-- Strobe hint (strobe mode only) -->
+      <p class="strobe-hint hidden" id="strobe-hint">
+        Click a ball to show or hide the components of its velocity.
+      </p>
+
+      <!-- Stats toggle (single mode only) -->
+      <div class="control-group hidden" id="stats-controls">
+        <label>Measurements</label>
+        <div class="seg-control cols-2" id="seg-stats">
+          <button class="seg-btn active" data-val="hide" type="button">Hide</button>
+          <button class="seg-btn" data-val="show" type="button">Show</button>
+        </div>
+      </div>
+
+      <!-- Explanation -->
+      <details class="explain-details" id="explain-details">
+        <summary>Key idea</summary>
+        <p id="explain-body">
+          Horizontal: no force acts, so <em>v</em><sub>h</sub> is constant.
+          Vertical: gravity acts downward, so <em>v</em><sub>v</sub> decreases,
+          reaches zero at the apex, then increases downward. Range is maximised
+          at 45° — and complementary angles (e.g. 30° and 60°) give the same range.
+        </p>
+      </details>
+
+    </aside>
+
+    <!-- ── Canvas ────────────────────────────────────────── -->
+    <section class="panel visual-panel">
+      <div class="canvas-wrap">
+        <canvas id="sim-canvas" width="960" height="560"
+                aria-label="Trajectory Explorer — projectile motion"></canvas>
+      </div>
+      <!-- Time scrubber (single + strobe modes) -->
+      <div class="scrubber-row hidden" id="scrubber-row">
+        <span class="scrubber-label">t = <span id="scrubber-time">0.00</span> s</span>
+        <input class="slider scrubber-slider" id="scrubber" type="range" min="0" max="1000" step="1" value="0">
+      </div>
+    </section>
+
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

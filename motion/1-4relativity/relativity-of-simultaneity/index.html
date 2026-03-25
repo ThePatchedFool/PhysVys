@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relativity of Simultaneity</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics — Motion 1.4</p>
+        <h1>Relativity of Simultaneity</h1>
+        <p class="intro">
+          A firework explodes at the centre of a fast-moving train. Switch between observers
+          to see why two events that are simultaneous in one frame need not be in another.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="btn-play"  class="toggle-button secondary-button" type="button">Pause</button>
+        <button id="btn-fire"  class="toggle-button fire-button"      type="button">Fire!</button>
+        <button id="btn-reset" class="toggle-button secondary-button" type="button">Reset</button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Controls</h2>
+
+        <div class="control-group">
+          <label>Observer</label>
+          <div class="seg-control" id="frame-toggle">
+            <button class="seg-btn active" data-frame="train"  type="button">Train (S′)</button>
+            <button class="seg-btn"        data-frame="ground" type="button">Ground (S)</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label for="beta-slider">Train velocity, \(\beta = v/c\)</label>
+          <input id="beta-slider" type="range" min="0.1" max="0.8" step="0.05" value="0.6">
+          <div class="input-row">
+            <input id="beta-number" type="number" min="0.1" max="0.8" step="0.05" value="0.6">
+            <span class="unit">× c</span>
+          </div>
+        </div>
+
+        <div class="readout-grid">
+          <div class="readout-card">
+            <span class="readout-label">Train velocity</span>
+            <span id="readout-beta" class="readout-value">v = 0.60c</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Left wall hit</span>
+            <span id="readout-left" class="readout-value muted">—</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Right wall hit</span>
+            <span id="readout-right" class="readout-value muted">—</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Verdict</span>
+            <span id="readout-verdict" class="readout-value muted">—</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap">
+          <canvas id="simulation-canvas" width="960" height="560"
+                  aria-label="Relativity of Simultaneity simulation"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

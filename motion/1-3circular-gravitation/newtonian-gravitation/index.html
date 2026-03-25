@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton's Law of Universal Gravitation</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics</p>
+        <h1>Newton's Law of Universal Gravitation</h1>
+        <p class="intro">
+          Switch between two-body and three-body collinear models to explore gravitational force, net force,
+          and the Stage 2 Earth-Moon zero-force style application.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="toggle-forces" class="toggle-button" type="button" aria-pressed="false">
+          Show Forces
+        </button>
+        <button id="toggle-reaction-forces" class="toggle-button secondary-button is-hidden" type="button" aria-pressed="false">
+          Show F31 and F32
+        </button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Controls</h2>
+
+        <div class="control-group">
+          <label for="model-select">Model</label>
+          <select id="model-select">
+            <option value="two">Two masses</option>
+            <option value="three">Three masses</option>
+          </select>
+        </div>
+
+        <div id="three-body-only" class="three-body-only">
+          <div class="control-group">
+            <label for="configuration-select">Configuration</label>
+            <select id="configuration-select">
+              <option value="between">m3 between m1 and m2</option>
+              <option value="left">m3 left of m1</option>
+              <option value="right">m3 right of m2</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label for="m1-mantissa-slider">Mass 1, \(m_1\) (kg)</label>
+          <input id="m1-mantissa-slider" type="range" min="1" max="9.99" step="0.01" value="5.97">
+          <div class="scientific-row">
+            <input id="m1-mantissa-input" type="number" min="1" max="9.99" step="0.01" value="5.97">
+            <span class="times-ten">× 10</span>
+            <input id="m1-exponent-input" type="number" min="-99" max="99" step="1" value="24">
+          </div>
+          <p id="m1-display" class="value-display"></p>
+        </div>
+
+        <div class="control-group">
+          <label for="m2-mantissa-slider">Mass 2, \(m_2\) (kg)</label>
+          <input id="m2-mantissa-slider" type="range" min="1" max="9.99" step="0.01" value="7.35">
+          <div class="scientific-row">
+            <input id="m2-mantissa-input" type="number" min="1" max="9.99" step="0.01" value="7.35">
+            <span class="times-ten">× 10</span>
+            <input id="m2-exponent-input" type="number" min="-99" max="99" step="1" value="22">
+          </div>
+          <p id="m2-display" class="value-display"></p>
+        </div>
+
+        <div id="m3-group" class="control-group three-body-only">
+          <label for="m3-mantissa-slider">Mass 3, \(m_3\) (kg)</label>
+          <input id="m3-mantissa-slider" type="range" min="1" max="9.99" step="0.01" value="1.00">
+          <div class="scientific-row">
+            <input id="m3-mantissa-input" type="number" min="1" max="9.99" step="0.01" value="1.00">
+            <span class="times-ten">× 10</span>
+            <input id="m3-exponent-input" type="number" min="-99" max="99" step="1" value="3">
+          </div>
+          <p id="m3-display" class="value-display"></p>
+        </div>
+
+        <div class="control-group">
+          <label id="r-label" for="r-mantissa-slider">Distance between \(m_1\) and \(m_2\), \(r\) (m)</label>
+          <input id="r-mantissa-slider" type="range" min="1" max="9.99" step="0.01" value="3.84">
+          <div class="scientific-row">
+            <input id="r-mantissa-input" type="number" min="1" max="9.99" step="0.01" value="3.84">
+            <span class="times-ten">× 10</span>
+            <input id="r-exponent-input" type="number" min="-99" max="99" step="1" value="8">
+          </div>
+          <p id="r-display" class="value-display"></p>
+        </div>
+
+        <div id="offset-group" class="control-group three-body-only">
+          <label id="offset-label" for="offset-mantissa-slider">Position of \(m_3\)</label>
+          <input id="offset-mantissa-slider" type="range" min="1" max="9.99" step="0.01" value="3.30">
+          <div class="scientific-row">
+            <input id="offset-mantissa-input" type="number" min="1" max="9.99" step="0.01" value="3.30">
+            <span class="times-ten">× 10</span>
+            <input id="offset-exponent-input" type="number" min="-99" max="99" step="1" value="8">
+          </div>
+          <p id="offset-display" class="value-display"></p>
+        </div>
+
+        <div class="readout-grid">
+          <div class="readout-card">
+            <span class="readout-label">Gravitational Constant</span>
+            <span class="readout-value">\(6.67 \times 10^{-11}\,\mathrm{N\,m^2\,kg^{-2}}\)</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Key Idea</span>
+            <span id="summary-value" class="readout-value"></span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap">
+          <canvas id="simulation-canvas" width="960" height="560" aria-label="Gravitational model"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+

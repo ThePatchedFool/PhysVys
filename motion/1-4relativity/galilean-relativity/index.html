@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galilean Relativity</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics — Motion 1.4</p>
+        <h1>Galilean Relativity</h1>
+        <p class="intro">
+          A ball is thrown straight up inside a moving train. Choose whose eyes you're watching through
+          — the ground observer sees a parabola; the train passenger sees a straight vertical toss.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="btn-play"     class="toggle-button"                  type="button">Pause</button>
+        <button id="btn-relaunch" class="toggle-button secondary-button" type="button">Relaunch</button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Controls</h2>
+
+        <div class="control-group">
+          <label>Observer</label>
+          <div class="seg-control" id="frame-toggle">
+            <button class="seg-btn active" data-frame="ground" type="button">Ground (S)</button>
+            <button class="seg-btn"        data-frame="train"  type="button">Train (S′)</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label for="u-slider">Train velocity, \(u\) (m s⁻¹)</label>
+          <input id="u-slider" type="range" min="0" max="15" step="1" value="10">
+          <div class="input-row">
+            <input id="u-number" type="number" min="0" max="15" step="1" value="10">
+            <span class="unit">m s⁻¹</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label for="vy-slider">Launch speed, \(v'_y\) (m s⁻¹)</label>
+          <input id="vy-slider" type="range" min="5" max="22" step="1" value="15">
+          <div class="input-row">
+            <input id="vy-number" type="number" min="5" max="22" step="1" value="15">
+            <span class="unit">m s⁻¹</span>
+          </div>
+        </div>
+
+        <div class="readout-grid">
+          <div class="readout-card">
+            <span class="readout-label">Galilean Transformation</span>
+            <span class="readout-value">\(x' = x - ut,\quad t' = t\)</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Trajectory observed</span>
+            <span id="readout-trajectory" class="readout-value highlight"></span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Ball velocity (current)</span>
+            <span id="readout-vx" class="readout-value"></span>
+            <span id="readout-vy" class="readout-value"></span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap">
+          <canvas id="simulation-canvas" width="960" height="560"
+                  aria-label="Galilean Relativity simulation"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propulsion — Conservation of Momentum</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.2</p>
+      <h1>Propulsion</h1>
+      <p class="intro" id="hero-intro">
+        In deep space there is nothing to push against. The only way to change
+        momentum is to throw mass the other way — and that is exactly what a
+        rocket does. Total momentum of the system stays zero.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <button id="btn-reset" class="action-btn action-btn--secondary" type="button">Reset</button>
+    </div>
+  </section>
+
+  <section class="layout">
+
+    <!-- ── Sidebar ───────────────────────────────────────── -->
+    <aside class="panel controls">
+
+      <!-- Mode selector -->
+      <div class="control-group">
+        <label>Mode</label>
+        <div class="seg-control cols-3" id="seg-mode">
+          <button class="seg-btn active" data-val="rocket" type="button">Rocket</button>
+          <button class="seg-btn" data-val="ion" type="button">
+            Ion<br><span class="seg-sub">thruster</span>
+          </button>
+          <button class="seg-btn" data-val="solar" type="button">
+            Solar<br><span class="seg-sub">sail</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Fire button -->
+      <div class="control-group">
+        <button id="btn-fire" class="action-btn fire-btn" type="button">
+          Fire Rocket
+        </button>
+        <p id="cooldown-label" class="cooldown-label"></p>
+      </div>
+
+      <!-- Sail type selector (hidden in non-solar modes) -->
+      <div class="control-group" id="sail-controls" style="display:none">
+        <label>Sail type</label>
+        <div class="seg-control cols-2" id="seg-sail">
+          <button class="seg-btn active" data-val="absorb" type="button">Absorb</button>
+          <button class="seg-btn" data-val="reflect" type="button">Reflect</button>
+        </div>
+      </div>
+
+      <!-- Ion selector (hidden in non-ion modes) -->
+      <div class="control-group" id="ion-controls" style="display:none">
+        <label>Ion species</label>
+        <div class="seg-control cols-3" id="seg-ion">
+          <button class="seg-btn active" data-val="xe" type="button">
+            Xe<br><span class="seg-sub">xenon</span>
+          </button>
+          <button class="seg-btn" data-val="kr" type="button">
+            Kr<br><span class="seg-sub">krypton</span>
+          </button>
+          <button class="seg-btn" data-val="ar" type="button">
+            Ar<br><span class="seg-sub">argon</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Vector toggle -->
+      <div class="control-group">
+        <label>Momentum vectors</label>
+        <div class="seg-control cols-2" id="seg-vectors">
+          <button class="seg-btn active" data-val="hide" type="button">Hide</button>
+          <button class="seg-btn" data-val="show" type="button">Show</button>
+        </div>
+      </div>
+
+      <!-- Explanation — content swapped by JS on mode change -->
+      <details class="explain-details" id="explain-details">
+        <summary>Key idea</summary>
+        <p id="explain-body">
+          Before firing, the rocket is at rest — total momentum is zero.
+          After ejecting exhaust gas backward, the exhaust carries momentum
+          in one direction, so the rocket must carry equal momentum in the
+          opposite direction. <strong>p</strong><sub>rocket</sub> +
+          <strong>p</strong><sub>exhaust</sub> = 0, always.
+        </p>
+      </details>
+
+    </aside>
+
+    <!-- ── Canvas ────────────────────────────────────────── -->
+    <section class="panel visual-panel">
+      <div class="canvas-wrap canvas-wrap--space">
+        <canvas id="sim-canvas" width="960" height="560"
+                aria-label="Propulsion — conservation of momentum"></canvas>
+      </div>
+    </section>
+
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

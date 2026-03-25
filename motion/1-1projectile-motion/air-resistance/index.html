@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effect of Air Resistance — Projectile Motion</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.1</p>
+      <h1>Effect of Air Resistance</h1>
+      <p class="intro">
+        Compare how air resistance changes range, maximum height and time of flight.
+        Select a projectile preset or adjust the drag coefficient to explore the effect.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <button id="btn-reset" class="action-btn action-btn--secondary" type="button">Reset</button>
+    </div>
+  </section>
+
+  <section class="layout">
+
+    <!-- ── Sidebar ───────────────────────────────────────── -->
+    <aside class="panel controls">
+
+      <!-- Launch mode -->
+      <div class="control-group">
+        <label>Launch mode</label>
+        <div class="seg-control cols-2" id="seg-mode">
+          <button class="seg-btn active" data-val="unilevel" type="button">Unilevel</button>
+          <button class="seg-btn"        data-val="raised"   type="button">Raised</button>
+        </div>
+      </div>
+
+      <!-- Display -->
+      <div class="control-group">
+        <label>Display</label>
+        <div class="seg-control cols-3" id="seg-display">
+          <button class="seg-btn"        data-val="nodrag" type="button">No drag</button>
+          <button class="seg-btn"        data-val="drag"   type="button">Drag</button>
+          <button class="seg-btn active" data-val="both"   type="button">Both</button>
+        </div>
+      </div>
+
+      <!-- Angle — shown for unilevel only -->
+      <div class="control-group" id="grp-angle">
+        <label>
+          Launch angle
+          <span class="label-value">
+            <input class="num-input" id="num-angle" type="number" min="1" max="89" step="1" value="45"> °
+          </span>
+        </label>
+        <input class="slider" id="slider-angle" type="range" min="1" max="89" step="1" value="45">
+      </div>
+
+      <!-- Height — shown for raised only -->
+      <div class="control-group hidden" id="grp-height">
+        <label>
+          Launch height
+          <span class="label-value">
+            <input class="num-input" id="num-height" type="number" min="5" max="50" step="1" value="20"> m
+          </span>
+        </label>
+        <input class="slider" id="slider-height" type="range" min="5" max="50" step="1" value="20">
+      </div>
+
+      <!-- Speed -->
+      <div class="control-group">
+        <label>
+          Launch speed
+          <span class="label-value">
+            <input class="num-input" id="num-speed" type="number" min="5" max="40" step="1" value="20"> m/s
+          </span>
+        </label>
+        <input class="slider" id="slider-speed" type="range" min="5" max="40" step="1" value="20">
+      </div>
+
+      <!-- Preset -->
+      <div class="control-group">
+        <label>Projectile preset</label>
+        <select id="sel-preset" class="preset-select">
+          <option value="">— custom —</option>
+          <option value="shotput">Shot put  (β = 0.002)</option>
+          <option value="cricket">Cricket ball  (β = 0.007)</option>
+          <option value="afl">AFL football  (β = 0.015)</option>
+          <option value="tennis" selected>Tennis ball  (β = 0.030)</option>
+          <option value="shuttle">Shuttlecock  (β = 0.120)</option>
+        </select>
+      </div>
+
+      <!-- Drag coefficient -->
+      <div class="control-group">
+        <label>
+          Drag coeff. β
+          <span class="label-value">
+            <input class="num-input" id="num-beta" type="number" min="0" max="0.15" step="0.001" value="0.030"> m⁻¹
+          </span>
+        </label>
+        <input class="slider" id="slider-beta" type="range" min="0" max="0.15" step="0.001" value="0.030">
+      </div>
+
+      <!-- Stats overlay -->
+      <div class="control-group">
+        <label>Stats overlay</label>
+        <div class="seg-control cols-2" id="seg-stats">
+          <button class="seg-btn"        data-val="hide" type="button">Hide</button>
+          <button class="seg-btn active" data-val="show" type="button">Show</button>
+        </div>
+      </div>
+
+      <!-- Fire -->
+      <div class="control-group">
+        <button id="btn-fire" class="action-btn fire-btn" type="button">Fire!</button>
+      </div>
+
+      <!-- Key idea -->
+      <details class="explain-details">
+        <summary>Key idea</summary>
+        <p>
+          Air resistance (drag) opposes motion and acts along the velocity vector,
+          reducing both horizontal and vertical speed. The drag coefficient
+          β = C<sub>d</sub>Aρ/2m captures how strongly a projectile is affected
+          relative to its mass. A heavy shot put barely notices the air; a shuttlecock
+          is dominated by it.
+        </p>
+      </details>
+
+    </aside>
+
+    <!-- ── Canvas ─────────────────────────────────────────── -->
+    <section class="panel visual-panel">
+      <div class="canvas-wrap">
+        <canvas id="sim-canvas" width="960" height="560"
+                aria-label="Effect of Air Resistance simulation"></canvas>
+      </div>
+    </section>
+
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

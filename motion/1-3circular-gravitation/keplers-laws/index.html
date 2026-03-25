@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kepler's Laws</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics</p>
+        <h1>Kepler's Laws</h1>
+        <p class="intro">
+          Explore an elliptical orbit, reveal the foci, compare equal swept areas over equal times, and use a second orbit to visualise
+          Kepler's Third Law: \(T^2 \propto a^3\).
+        </p>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Controls</h2>
+
+        <div class="control-group">
+          <label for="a-slider">Semi-major axis, a</label>
+          <input id="a-slider" type="range" min="80" max="260" step="1" value="180">
+          <input id="a-input" type="number" min="80" max="260" step="1" value="180">
+          <p id="a-display" class="value-display"></p>
+        </div>
+
+        <div class="control-group">
+          <label for="e-slider">Eccentricity, e</label>
+          <input id="e-slider" type="range" min="0" max="0.82" step="0.01" value="0">
+          <input id="e-input" type="number" min="0" max="0.82" step="0.01" value="0">
+          <p id="e-display" class="value-display"></p>
+        </div>
+
+        <div class="control-group">
+          <label for="period-slider">Orbital period, T</label>
+          <input id="period-slider" type="range" min="6" max="40" step="0.5" value="18">
+          <input id="period-input" type="number" min="6" max="40" step="0.5" value="18">
+          <p id="period-display" class="value-display"></p>
+        </div>
+
+        <div class="control-group">
+          <label for="interval-slider">Equal time interval, &Delta;t</label>
+          <input id="interval-slider" type="range" min="0.4" max="4.5" step="0.1" value="1.6">
+          <input id="interval-input" type="number" min="0.4" max="4.5" step="0.1" value="1.6">
+          <p id="interval-display" class="value-display"></p>
+        </div>
+
+        <div class="control-group">
+          <label for="separation-slider">Area separation angle</label>
+          <input id="separation-slider" type="range" min="0" max="360" step="1" value="180">
+          <input id="separation-input" type="number" min="0" max="360" step="1" value="180">
+          <p id="separation-display" class="value-display"></p>
+        </div>
+
+        <div class="control-group">
+          <label for="comparison-slider">Comparison orbit semi-major axis, a2</label>
+          <input id="comparison-slider" type="range" min="90" max="340" step="1" value="270">
+          <input id="comparison-input" type="number" min="90" max="340" step="1" value="270">
+          <p id="comparison-display" class="value-display"></p>
+        </div>
+
+        <div class="toggle-grid">
+          <button id="toggle-foci" class="toggle-chip" type="button">Show Axes and Foci</button>
+          <button id="toggle-areas" class="toggle-chip" type="button">Show Equal Areas</button>
+          <button id="toggle-third-law" class="toggle-chip" type="button">Show Third Law</button>
+          <button id="toggle-animation" class="toggle-chip active" type="button">Pause Orbit</button>
+        </div>
+
+        <div class="readout-grid">
+          <div class="readout-card">
+            <span class="readout-label">Kepler I</span>
+            <span class="readout-value">Planets move in ellipses with the Sun at one focus.</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Kepler II</span>
+            <span id="area-readout" class="readout-value"></span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Kepler III</span>
+            <span id="third-law-readout" class="readout-value"></span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap">
+          <canvas id="simulation-canvas" width="1100" height="1140" aria-label="Kepler's Laws simulation"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,429 @@
+:root {
+  --bg-top: #eef6ff;
+  --bg-bottom: #d7e8ff;
+  --panel: rgba(255, 255, 255, 0.82);
+  --panel-border: rgba(18, 57, 99, 0.12);
+  --ink: #15304d;
+  --muted: #55708d;
+  --accent: #0f766e;
+  --accent-strong: #0d9488;
+  --shadow: 0 24px 60px rgba(19, 48, 77, 0.14);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.85), transparent 30%),
+    linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+}
+
+.page {
+  width: min(1280px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0 2rem;
+}
+
+/* ── Hero ─────────────────────────────────────────────────── */
+
+.hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.hero-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(21, 48, 77, 0.12);
+}
+.hero-link:hover { background: white; }
+
+.hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 0.95;
+}
+
+.intro {
+  max-width: 68ch;
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* ── Layout ────────────────────────────────────────────────── */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+/* ── Controls sidebar ──────────────────────────────────────── */
+
+.controls {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.controls h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+/* ── Step list ─────────────────────────────────────────────── */
+
+.step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.step-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid rgba(21, 48, 77, 0.1);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.6);
+  cursor: pointer;
+  font: inherit;
+  color: var(--muted);
+  text-align: left;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.step-btn:hover {
+  background: rgba(255,255,255,0.9);
+  color: var(--ink);
+}
+
+.step-btn.active {
+  background: white;
+  color: var(--ink);
+  border-color: var(--accent-strong);
+  box-shadow: 0 2px 10px rgba(13,148,136,0.15);
+}
+
+.step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(21,48,77,0.08);
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.step-btn.active .step-num {
+  background: var(--accent-strong);
+  color: white;
+}
+
+.step-btn.completed .step-num {
+  background: #16a34a;
+  color: white;
+}
+
+.step-btn.completed {
+  color: var(--ink);
+}
+
+.step-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* ── Step nav ──────────────────────────────────────────────── */
+
+.step-nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.step-nav .toggle-button {
+  flex: 1;
+}
+
+/* ── Readout cards ─────────────────────────────────────────── */
+
+.readout-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.readout-card {
+  padding: 0.75rem 0.9rem;
+  border-radius: 14px;
+  background: rgba(239, 247, 255, 0.95);
+}
+
+.readout-label {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.readout-value {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.muted { color: var(--muted); }
+.highlight-green { color: #16a34a; }
+.highlight-red   { color: #dc2626; }
+.highlight-amber { color: #d97706; }
+
+/* ── Canvas panel ──────────────────────────────────────────── */
+
+.visual-panel { padding: 0.85rem; }
+
+.canvas-wrap {
+  overflow: hidden;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(225,238,255,0.94));
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 12 / 7;
+}
+
+/* ── Buttons ───────────────────────────────────────────────── */
+
+.toggle-button {
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(15,118,110,0.28);
+  transition: opacity 0.15s;
+}
+
+.toggle-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.secondary-button {
+  background: linear-gradient(135deg, #475569, #64748b);
+  box-shadow: 0 8px 20px rgba(71,85,105,0.22);
+}
+
+/* ── Modal ─────────────────────────────────────────────────── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 30, 50, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-card {
+  background: white;
+  border-radius: 24px;
+  padding: 2rem 2.2rem 1.8rem;
+  max-width: 560px;
+  width: 100%;
+  box-shadow: 0 32px 80px rgba(15,30,50,0.28);
+  position: relative;
+}
+
+.modal-step-badge {
+  display: inline-block;
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+  background: var(--accent-strong);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.modal-card h2 {
+  margin: 0 0 0.9rem;
+  font-size: 1.45rem;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.modal-card p, .modal-card li {
+  font-size: 0.97rem;
+  line-height: 1.6;
+  color: #334155;
+  margin: 0 0 0.7rem;
+}
+
+.modal-card ol, .modal-card ul {
+  padding-left: 1.4rem;
+  margin: 0 0 0.7rem;
+}
+
+.modal-card li { margin-bottom: 0.4rem; }
+
+.modal-note {
+  background: rgba(239,247,255,0.9);
+  border-left: 3px solid var(--accent-strong);
+  border-radius: 0 10px 10px 0;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.9rem !important;
+  color: var(--muted) !important;
+  margin-top: 0.5rem !important;
+}
+
+.modal-close {
+  display: block;
+  width: 100%;
+  margin-top: 1.2rem;
+  padding: 0.85rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: white;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(15,118,110,0.28);
+}
+
+/* ── Marker controls ───────────────────────────────────────── */
+
+.marker-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.marker-heading {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.marker-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.marker-row {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.marker-btn {
+  flex: 1;
+  padding: 0.6rem 0.2rem;
+  border: 0;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.marker-btn:active { transform: scale(0.94); }
+
+.station-marker {
+  background: #2563eb;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+}
+
+.train-marker {
+  background: #ea580c;
+  box-shadow: 0 4px 12px rgba(234,88,12,0.3);
+}
+
+.clear-marker {
+  background: linear-gradient(135deg, #475569, #64748b);
+  box-shadow: 0 4px 12px rgba(71,85,105,0.22);
+  flex: 0 0 auto;
+  padding: 0.6rem 0.7rem;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+
+@media (max-width: 960px) {
+  .hero { align-items: flex-start; flex-direction: column; }
+  .hero-actions { justify-content: flex-start; }
+  .layout { grid-template-columns: 1fr; }
+}

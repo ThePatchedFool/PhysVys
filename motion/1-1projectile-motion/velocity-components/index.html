@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Independence of Velocity Components — Projectile Motion</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.1</p>
+      <h1>Independence of Velocity Components</h1>
+      <p class="intro">
+        A ball dropped from rest and a ball launched horizontally from the same height
+        fall together — reaching the ground at exactly the same time. Gravity acts
+        identically on both; only horizontal motion differs.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <button id="btn-reset" class="action-btn action-btn--secondary" type="button">Reset</button>
+    </div>
+  </section>
+
+  <section class="layout">
+
+    <!-- ── Sidebar ───────────────────────────────────────── -->
+    <aside class="panel controls">
+
+      <!-- Mode -->
+      <div class="control-group">
+        <label>Mode</label>
+        <div class="seg-control cols-2" id="seg-mode">
+          <button class="seg-btn active" data-val="animation" type="button">Animation</button>
+          <button class="seg-btn"        data-val="strobe"    type="button">Strobe</button>
+        </div>
+      </div>
+
+      <!-- Launch height -->
+      <div class="control-group">
+        <label>
+          Launch height
+          <span class="label-value">
+            <input class="num-input" id="num-height" type="number" min="5" max="50" step="1" value="20"> m
+          </span>
+        </label>
+        <input class="slider" id="slider-height" type="range" min="5" max="50" step="1" value="20">
+      </div>
+
+      <!-- Horizontal speed -->
+      <div class="control-group">
+        <label>
+          Horizontal speed
+          <span class="label-value">
+            <input class="num-input" id="num-speed" type="number" min="5" max="30" step="1" value="15"> m/s
+          </span>
+        </label>
+        <input class="slider" id="slider-speed" type="range" min="5" max="30" step="1" value="15">
+      </div>
+
+      <!-- Fire button -->
+      <div class="control-group">
+        <button id="btn-fire" class="action-btn fire-btn" type="button">Fire!</button>
+      </div>
+
+      <!-- Guiding lines -->
+      <div class="control-group">
+        <label>Guiding lines</label>
+        <div class="seg-control cols-2" id="seg-lines">
+          <button class="seg-btn active" data-val="hide" type="button">Hide</button>
+          <button class="seg-btn"        data-val="show" type="button">Show</button>
+        </div>
+      </div>
+
+      <!-- Velocity vectors -->
+      <div class="control-group">
+        <label>Velocity components</label>
+        <div class="seg-control cols-2" id="seg-vectors">
+          <button class="seg-btn active" data-val="hide" type="button">Hide</button>
+          <button class="seg-btn"        data-val="show" type="button">Show</button>
+        </div>
+      </div>
+
+      <!-- Landing times -->
+      <div class="control-group">
+        <label>Landing times</label>
+        <div class="seg-control cols-2" id="seg-times">
+          <button class="seg-btn active" data-val="hide" type="button">Hide</button>
+          <button class="seg-btn"        data-val="show" type="button">Show</button>
+        </div>
+      </div>
+
+      <!-- Explanation -->
+      <details class="explain-details">
+        <summary>Key idea</summary>
+        <p>
+          Vertical motion depends only on gravity — not on horizontal velocity.
+          Both balls experience the same downward acceleration <em>g</em>, so at every
+          instant they share the same height. The launched ball's horizontal motion is
+          completely independent: it travels at constant <em>v</em><sub>h</sub> while
+          falling, unaffected by gravity.
+        </p>
+      </details>
+
+    </aside>
+
+    <!-- ── Canvas ─────────────────────────────────────── -->
+    <section class="panel visual-panel">
+      <div class="canvas-wrap">
+        <canvas id="sim-canvas" width="960" height="560"
+                aria-label="Independence of Velocity Components simulation"></canvas>
+      </div>
+      <div class="scrubber-row" id="scrubber-row">
+        <span class="scrubber-label">t = <span id="scrubber-time">0.00</span> s</span>
+        <input class="slider scrubber-slider" id="scrubber" type="range" min="0" max="1000" step="1" value="0">
+      </div>
+    </section>
+
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

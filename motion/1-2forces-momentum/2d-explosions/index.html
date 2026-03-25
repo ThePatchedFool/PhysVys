@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2D Explosions</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.2</p>
+      <h1>2D Explosions</h1>
+      <p class="intro">
+        A stationary object breaks apart. Total initial momentum is zero —
+        so the fragment momenta must always sum to zero, forming a closed polygon.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <button id="btn-play"  class="action-btn" type="button">Pause</button>
+      <button id="btn-reset" class="action-btn secondary" type="button">Reset</button>
+    </div>
+  </section>
+
+  <section class="layout">
+    <!-- ── Sidebar ──────────────────────────────────────────── -->
+    <aside class="panel controls">
+
+      <!-- Preset -->
+      <div class="control-group">
+        <label>Scenario</label>
+        <div class="seg-control cols-2" id="seg-preset">
+          <button class="seg-btn active" data-val="0" type="button">2 frags — equal m</button>
+          <button class="seg-btn"        data-val="1" type="button">2 frags — 1:2 m</button>
+          <button class="seg-btn"        data-val="2" type="button">3 frags — equal m</button>
+          <button class="seg-btn"        data-val="3" type="button">3 frags — unequal m</button>
+        </div>
+      </div>
+
+      <!-- Display mode -->
+      <div class="control-group">
+        <label>Display mode</label>
+        <div class="seg-control cols-2" id="seg-mode">
+          <button class="seg-btn active" data-val="animation" type="button">Animation</button>
+          <button class="seg-btn"        data-val="strobe"    type="button">Strobe</button>
+        </div>
+      </div>
+
+      <!-- Vector display -->
+      <div class="control-group">
+        <label>Vectors</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="vector-mode" value="none"     checked> None</label>
+          <label class="radio-label"><input type="radio" name="vector-mode" value="velocity"> Velocity</label>
+          <label class="radio-label"><input type="radio" name="vector-mode" value="momentum"> Momentum</label>
+        </div>
+      </div>
+
+      <!-- Extra toggles -->
+      <div class="control-group">
+        <label>Show / hide</label>
+        <div class="vector-toggles">
+          <button class="vec-btn" id="btn-triangle" type="button">
+            <span class="vec-dot" style="background:#0d9488"></span>Momentum triangle
+          </button>
+          <button class="vec-btn" id="btn-labels" type="button">
+            <span class="vec-dot" style="background:#2563eb"></span>Labels &amp; values
+          </button>
+          <button class="vec-btn" id="btn-tri-edit" type="button">
+            <span class="vec-dot" style="background:#7c3aed"></span>Edit momentum triangle
+          </button>
+        </div>
+      </div>
+
+      <!-- Strobe interval -->
+      <div class="control-group">
+        <label>Strobe interval</label>
+        <div class="slider-row">
+          <input type="range" id="slider-strobe" min="0.10" max="1.0" step="0.05" value="0.40">
+          <span class="slider-val" id="val-strobe">0.40</span><span class="slider-unit">s</span>
+        </div>
+      </div>
+
+      <!-- Fragment A -->
+      <div class="control-group particle-group" id="group-f0">
+        <label class="particle-label" style="color:#2563eb">Fragment A</label>
+        <div class="param-row">
+          <span>Mass</span>
+          <input type="range" id="mass-0" min="1" max="4" step="1" value="1">
+          <span class="slider-val" id="val-mass-0">1</span><span class="slider-unit">m</span>
+        </div>
+        <div class="param-row">
+          <span>Speed</span>
+          <input type="range" id="speed-0" min="50" max="400" step="10" value="200">
+          <span class="slider-val" id="val-speed-0">200</span>
+        </div>
+        <div class="param-row">
+          <span>Angle</span>
+          <input type="range" id="angle-0" min="-180" max="180" step="5" value="0">
+          <span class="slider-val" id="val-angle-0">0°</span>
+        </div>
+      </div>
+
+      <!-- Fragment B -->
+      <div class="control-group particle-group" id="group-f1">
+        <label class="particle-label" style="color:#dc2626">Fragment B</label>
+        <div class="param-row">
+          <span>Mass</span>
+          <input type="range" id="mass-1" min="1" max="4" step="1" value="1">
+          <span class="slider-val" id="val-mass-1">1</span><span class="slider-unit">m</span>
+        </div>
+        <div class="param-row">
+          <span>Speed</span>
+          <input type="range" id="speed-1" min="50" max="400" step="10" value="200">
+          <span class="slider-val" id="val-speed-1">200</span>
+        </div>
+        <div class="param-row">
+          <span>Angle</span>
+          <input type="range" id="angle-1" min="-180" max="180" step="5" value="180">
+          <span class="slider-val" id="val-angle-1">180°</span>
+        </div>
+      </div>
+
+      <!-- Fragment C -->
+      <div class="control-group particle-group" id="group-f2" style="display:none">
+        <label class="particle-label" style="color:#d97706">Fragment C</label>
+        <div class="param-row">
+          <span>Mass</span>
+          <input type="range" id="mass-2" min="1" max="4" step="1" value="1">
+          <span class="slider-val" id="val-mass-2">1</span><span class="slider-unit">m</span>
+        </div>
+        <div class="param-row">
+          <span>Speed</span>
+          <input type="range" id="speed-2" min="50" max="400" step="10" value="200">
+          <span class="slider-val" id="val-speed-2">200</span>
+        </div>
+        <div class="param-row">
+          <span>Angle</span>
+          <input type="range" id="angle-2" min="-180" max="180" step="5" value="210">
+          <span class="slider-val" id="val-angle-2">210°</span>
+        </div>
+      </div>
+
+      <!-- Note card -->
+      <div class="explain-card" id="note-card"></div>
+
+    </aside>
+
+    <!-- ── Canvas ────────────────────────────────────────────── -->
+    <section class="panel visual-panel">
+      <div class="canvas-wrap">
+        <canvas id="sim-canvas" width="960" height="560"
+                aria-label="2D explosion simulation"></canvas>
+      </div>
+    </section>
+  </section>
+</main>
+<div id="tri-modal" class="tri-modal" hidden>
+  <div class="tri-modal-backdrop" id="tri-modal-backdrop"></div>
+  <div class="tri-modal-panel">
+    <div class="tri-modal-hd">
+      <span>Momentum Triangle Editor</span>
+      <button class="tri-close-btn" id="tri-modal-close" type="button">✕</button>
+    </div>
+    <canvas id="tri-canvas" width="460" height="460"></canvas>
+    <p class="tri-hint">Drag the coloured vertices to change fragment momenta. The triangle always closes (total momentum = 0). Masses stay fixed.</p>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
