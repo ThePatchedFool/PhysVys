@@ -282,6 +282,26 @@ input[type="number"] {
   font-weight: 700;
 }
 
+/* ── Toggle button ── */
+
+.toggle-button {
+  padding: 0.85rem 1.15rem;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #475569, #64748b);
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(71, 85, 105, 0.22);
+  transition: background 0.15s;
+}
+
+.toggle-button.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 10px 24px rgba(15, 118, 110, 0.28);
+}
+
 /* ── Canvas ── */
 
 .visual-panel {

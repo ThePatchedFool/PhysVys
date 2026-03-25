@@ -21,10 +21,13 @@ function formatSciN(val, unit) {
 }
 
 /* ── State ── */
+const N_FIELD_LINES = 16;
+
 const state = {
   mode: 'explore',
   sign: +1,
   magnitude: 1e-6,
+  showFieldLines: false,
 
   // test point position in CSS pixels (set in init)
   testX: 0,
@@ -58,6 +61,67 @@ function resizeCanvas() {
   state.testX = Math.min(state.testX || fieldWidth() * 0.72, fieldWidth() - TEST_RADIUS - 4);
   state.testY = state.testY || cssHeight() / 2;
   draw();
+}
+
+/* ── Field lines ── */
+
+function rayExitPoint(sx, sy, angle) {
+  const fw = fieldWidth(), H = cssHeight();
+  const ca = Math.cos(angle), sa = Math.sin(angle);
+  let t = Infinity;
+  if (ca > 0) t = Math.min(t, (fw - sx) / ca);
+  else if (ca < 0) t = Math.min(t, -sx / ca);
+  if (sa > 0) t = Math.min(t, (H  - sy) / sa);
+  else if (sa < 0) t = Math.min(t, -sy / sa);
+  return { x: sx + ca * t, y: sy + sa * t };
+}
+
+function drawFieldLines() {
+  const sx  = sourceX(), sy = sourceY();
+  const fw  = fieldWidth(), H = cssHeight();
+  const col = state.sign > 0 ? '#dc2626' : '#2563eb';
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, 0, fw, H);
+  ctx.clip();
+
+  for (let i = 0; i < N_FIELD_LINES; i++) {
+    const angle = (i / N_FIELD_LINES) * Math.PI * 2;
+    const end   = rayExitPoint(sx, sy, angle);
+    const x1    = sx + Math.cos(angle) * (SOURCE_RADIUS + 2);
+    const y1    = sy + Math.sin(angle) * (SOURCE_RADIUS + 2);
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(end.x, end.y);
+    ctx.strokeStyle = col;
+    ctx.lineWidth   = 1.5;
+    ctx.globalAlpha = 0.35;
+    ctx.stroke();
+
+    // Arrowhead: outward for +Q, inward for −Q
+    const t   = state.sign > 0 ? 0.62 : 0.38;
+    const dir = state.sign > 0 ? angle : angle + Math.PI;
+    const ax  = x1 + (end.x - x1) * t;
+    const ay  = y1 + (end.y - y1) * t;
+    const hs  = 7;
+    ctx.save();
+    ctx.globalAlpha = 0.5;
+    ctx.translate(ax, ay);
+    ctx.rotate(dir);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-hs, -hs * 0.4);
+    ctx.lineTo(-hs,  hs * 0.4);
+    ctx.closePath();
+    ctx.fillStyle = col;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  ctx.globalAlpha = 1;
+  ctx.restore();
 }
 
 /* ── Drawing helpers ── */
@@ -384,6 +448,7 @@ function draw() {
   const H = cssHeight();
   ctx.clearRect(0, 0, W, H);
   drawGraph();
+  if (state.showFieldLines) drawFieldLines();
   drawRadialLine();
   drawFieldArrow();
   drawSourceCharge();
@@ -430,6 +495,16 @@ function updateQDisplay() {
 }
 
 /* ── Controls wiring ── */
+
+const btnLines = document.getElementById('btn-show-lines');
+btnLines.addEventListener('click', () => {
+  state.showFieldLines = !state.showFieldLines;
+  btnLines.classList.toggle('active', state.showFieldLines);
+  btnLines.setAttribute('aria-pressed', String(state.showFieldLines));
+  btnLines.textContent = state.showFieldLines ? 'Hide Field Lines' : 'Show Field Lines';
+  draw();
+});
+
 
 // Mode toggle
 document.getElementById('btn-mode-explore').addEventListener('click', () => {
