@@ -248,6 +248,30 @@ function drawTrajectory() {
     ctx.stroke();
   }
 
+  // ── 3½. Equal-time stroboscopic ticks along the path ──
+  // Ticks are equally spaced in time, so closely-packed = slow, spread-out = fast.
+  {
+    const N    = 12;
+    const HALF = 7;   // half-length of each tick mark in px
+    ctx.strokeStyle = 'rgba(15,118,110,0.55)';
+    ctx.lineWidth   = 1.8;
+    for (let i = 0; i <= N; i++) {
+      const t   = (i / N) * tEnd;
+      const xPx = pl + V0 * t * PPM;
+      const yPx = my + qDir * 0.5 * a * t * t * PPM;
+      // Unit vector along path at this moment; perpendicular tick is rotated 90°
+      const vx  = V0;
+      const vy  = qDir * a * t;
+      const mag = Math.hypot(vx, vy) || 1;
+      const px  = -vy / mag;   // perpendicular x component
+      const py  =  vx / mag;   // perpendicular y component
+      ctx.beginPath();
+      ctx.moveTo(xPx - HALF * px, yPx - HALF * py);
+      ctx.lineTo(xPx + HALF * px, yPx + HALF * py);
+      ctx.stroke();
+    }
+  }
+
   // ── 4. Particle marker at entry (left edge of plates) ──
   const { q } = getParticle();
   const pCol  = q < 0 ? '#2563eb' : '#dc2626';
@@ -340,7 +364,7 @@ function drawAccelPlates() {
 
 function drawAccelTrajectory() {
   const ph = calcAccelPhysics();
-  const { V0, v_exit, q } = ph;
+  const { V0, v_exit, a, tCross, q } = ph;
   const x  = accelMidX();
   const ty = topPlY();
   const by = botPlY();
@@ -366,6 +390,22 @@ function drawAccelTrajectory() {
   ctx.moveTo(x, by);
   ctx.lineTo(x, H());
   ctx.stroke();
+
+  // ── 3½. Equal-time stroboscopic ticks inside the field ──
+  {
+    const N    = 12;
+    const HALF = 9;   // half-width of each horizontal tick in px
+    ctx.strokeStyle = 'rgba(15,118,110,0.55)';
+    ctx.lineWidth   = 1.8;
+    for (let i = 0; i <= N; i++) {
+      const t   = (i / N) * tCross;
+      const yPx = ty + (V0 * t + 0.5 * a * t * t) * PPM;
+      ctx.beginPath();
+      ctx.moveTo(x - HALF, yPx);
+      ctx.lineTo(x + HALF, yPx);
+      ctx.stroke();
+    }
+  }
 
   // ── 4. Particle marker at top-plate entry ──
   const pCol  = q < 0 ? '#2563eb' : '#dc2626';
