@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charged Particle Deflection</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="../../../vendor/mathjax/es5/tex-svg.js"></script>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics — Topic 2: Electromagnetism</p>
+        <h1>Charged Particle Deflection</h1>
+        <p class="intro">
+          Explore how a charged particle moves in a uniform electric field between
+          parallel plates. In <strong>Deflection</strong> mode the particle enters
+          perpendicular to \(\mathbf{E}\) and follows a parabolic path — just like
+          projectile motion. In <strong>Acceleration</strong> mode it enters parallel
+          to \(\mathbf{E}\) and speeds up or slows down uniformly.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="btn-show-field" class="toggle-button" type="button" aria-pressed="false">
+          Show Field Arrows
+        </button>
+        <button id="btn-show-force" class="toggle-button" type="button" aria-pressed="false">
+          Show Force
+        </button>
+        <button id="btn-show-undeflected" class="toggle-button" type="button" aria-pressed="false">
+          Show Undeflected Path
+        </button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Controls</h2>
+
+        <!-- Mode toggle -->
+        <div class="mode-toggle-row">
+          <button id="btn-mode-deflection" class="mode-btn active" type="button" aria-pressed="true">Deflection</button>
+          <button id="btn-mode-acceleration" class="mode-btn" type="button" aria-pressed="false">Acceleration</button>
+        </div>
+
+        <!-- Particle preset -->
+        <div class="control-group">
+          <label for="particle-select">Particle</label>
+          <select id="particle-select">
+            <option value="electron">Electron</option>
+            <option value="proton">Proton</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+
+        <!-- Custom charge (hidden unless Custom selected) -->
+        <div id="custom-charge-group" class="control-group is-hidden">
+          <label>Charge sign</label>
+          <div class="sign-row">
+            <button class="sign-btn positive active" id="charge-sign-pos" type="button" aria-pressed="true">+</button>
+            <button class="sign-btn negative"        id="charge-sign-neg" type="button" aria-pressed="false">−</button>
+          </div>
+        </div>
+
+        <!-- Plate voltage -->
+        <div class="control-group">
+          <label for="voltage-slider">Plate voltage \(V\)</label>
+          <input id="voltage-slider" type="range" min="0" max="5000" step="100" value="0">
+          <p id="voltage-display" class="value-display"></p>
+        </div>
+
+        <!-- Plate separation -->
+        <div class="control-group">
+          <label for="separation-slider">Plate separation \(d\)</label>
+          <input id="separation-slider" type="range" min="2" max="20" step="1" value="10">
+          <p id="separation-display" class="value-display"></p>
+        </div>
+
+        <!-- Entry speed -->
+        <div class="control-group">
+          <label id="speed-label" for="speed-slider">Entry speed \(v_0\)</label>
+          <input id="speed-slider" type="range" min="1" max="20" step="0.5" value="5">
+          <p id="speed-display" class="value-display"></p>
+        </div>
+
+        <!-- Readout cards -->
+        <div class="readout-grid">
+          <div class="readout-card">
+            <span class="readout-label">Field strength \(E = V/d\)</span>
+            <span id="readout-e" class="readout-value">—</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Force \(F = qE\)</span>
+            <span id="readout-f" class="readout-value">—</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Acceleration \(a = F/m\)</span>
+            <span id="readout-a" class="readout-value">—</span>
+          </div>
+          <!-- Deflection readout (shown in Deflection mode) -->
+          <div id="readout-deflection-card" class="readout-card">
+            <span class="readout-label">Deflection \(y\) at exit</span>
+            <span id="readout-y" class="readout-value">—</span>
+          </div>
+          <!-- Exit speed readout (shown in Acceleration mode) -->
+          <div id="readout-exit-speed-card" class="readout-card is-hidden">
+            <span class="readout-label">Exit speed \(v\)</span>
+            <span id="readout-v-exit" class="readout-value">—</span>
+          </div>
+          <!-- Energy readouts -->
+          <div class="readout-card">
+            <span class="readout-label">Entry KE &nbsp;\(\tfrac{1}{2}mv_0^2\)</span>
+            <span id="readout-ke-entry-j"  class="readout-value">—</span>
+            <span id="readout-ke-entry-ev" class="readout-sub">—</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">Exit KE</span>
+            <span id="readout-ke-exit-j"  class="readout-value">—</span>
+            <span id="readout-ke-exit-ev" class="readout-sub">—</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap">
+          <canvas id="simulation-canvas" width="960" height="560"
+            aria-label="Charged particle deflection simulation canvas"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
