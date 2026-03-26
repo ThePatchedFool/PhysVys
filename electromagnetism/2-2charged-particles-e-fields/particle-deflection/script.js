@@ -121,12 +121,10 @@ function calcPhysics() {
 
 /* ───────────────────────── Acceleration physics ────────────────────── */
 
-// In acceleration mode the plates are vertical (left / right).
-// The gap between them equals state.d — the same slider as deflection.
-// The particle enters from the left, parallel to the field, and
-// is always arranged to accelerate rightward regardless of charge sign.
-function accelLeftX()  { return W() / 2 - halfGapPx(); }
-function accelRightX() { return W() / 2 + halfGapPx(); }
+// In acceleration mode the plates are horizontal (same layout as Deflection).
+// The particle enters at the top plate, travels downward through the gap,
+// and exits at the bottom plate — always arranged to accelerate downward.
+function accelMidX() { return W() / 2; }
 
 function calcAccelPhysics() {
   const { V, d } = state;
@@ -295,98 +293,81 @@ function drawTrajectory() {
 }
 
 function drawAccelPlates() {
-  const lx = accelLeftX(), rx = accelRightX();
-  const PT = PLATE_T;
-  const my = midY(), h = H();
-
-  // Polarity is set so the particle always accelerates rightward:
-  //   q > 0  →  left plate is +  (E rightward, force rightward)
-  //   q < 0  →  right plate is + (E leftward, force rightward since F = qE with q < 0)
+  // Horizontal plates — identical layout to Deflection mode.
+  // Polarity is set so the particle always accelerates downward:
+  //   q > 0  →  top plate is +  (E downward, force on + charge is downward)
+  //   q < 0  →  bottom plate is + (E upward, force on − charge is downward)
+  const x1 = plLeft(), x2 = plRight();
+  const ty  = topPlY(), by  = botPlY();
+  const PT  = PLATE_T;
   const { q } = getParticle();
-  const leftPos  = q > 0;
-  const leftCol  = leftPos ? '#dc2626' : '#2563eb';
-  const rightCol = leftPos ? '#2563eb' : '#dc2626';
+  const topIsPos = q > 0;
 
   // Field region fill
   ctx.fillStyle = 'rgba(220, 235, 255, 0.32)';
-  ctx.fillRect(lx, 0, rx - lx, h);
+  ctx.fillRect(x1, ty, x2 - x1, by - ty);
 
-  // Left plate
-  ctx.fillStyle = leftCol;
-  ctx.fillRect(lx - PT, 0, PT, h);
+  // Top plate
+  ctx.fillStyle = topIsPos ? '#dc2626' : '#2563eb';
+  ctx.fillRect(x1 - 4, ty - PT, x2 - x1 + 8, PT);
   ctx.fillStyle = 'rgba(255,255,255,0.22)';
-  ctx.fillRect(lx - PT, 0, PT / 3, h);
+  ctx.fillRect(x1 - 4, ty - PT, x2 - x1 + 8, PT * 0.35);
 
-  // Right plate
-  ctx.fillStyle = rightCol;
-  ctx.fillRect(rx, 0, PT, h);
+  // Bottom plate
+  ctx.fillStyle = topIsPos ? '#2563eb' : '#dc2626';
+  ctx.fillRect(x1 - 4, by, x2 - x1 + 8, PT);
   ctx.fillStyle = 'rgba(255,255,255,0.22)';
-  ctx.fillRect(rx, 0, PT / 3, h);
+  ctx.fillRect(x1 - 4, by, x2 - x1 + 8, PT * 0.35);
 
-  // Polarity labels
-  ctx.font         = 'bold 15px "Trebuchet MS", sans-serif';
-  ctx.textBaseline = 'middle';
+  // Polarity signs (left side)
+  ctx.font = 'bold 15px "Trebuchet MS", sans-serif';
   ctx.textAlign    = 'right';
-  ctx.fillStyle    = leftPos ? '#b91c1c' : '#1d4ed8';
-  ctx.fillText(leftPos ? '+' : '−', lx - PT - 10, my);
-  ctx.textAlign = 'left';
-  ctx.fillStyle = leftPos ? '#1d4ed8' : '#b91c1c';
-  ctx.fillText(leftPos ? '−' : '+', rx + PT + 10, my);
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = topIsPos ? '#b91c1c' : '#1d4ed8';
+  ctx.fillText(topIsPos ? '+' : '−', x1 - 10, ty - PT / 2);
+  ctx.fillStyle = topIsPos ? '#1d4ed8' : '#b91c1c';
+  ctx.fillText(topIsPos ? '−' : '+', x1 - 10, by + PT / 2);
 
-  // Voltage labels at top of each plate
-  const vLabel = state.V > 0 ? `+${state.V} V` : '0 V';
-  ctx.font         = '12px "Trebuchet MS", sans-serif';
-  ctx.textBaseline = 'bottom';
-  ctx.textAlign    = 'center';
-  ctx.fillStyle    = leftPos ? '#b91c1c' : '#1d4ed8';
-  ctx.fillText(leftPos ? vLabel : '0 V', lx - PT / 2, 20);
-  ctx.fillStyle    = leftPos ? '#1d4ed8' : '#b91c1c';
-  ctx.fillText(leftPos ? '0 V' : vLabel, rx + PT / 2, 20);
+  // Voltage labels (right side)
+  const vStr = state.V > 0 ? `+${state.V} V` : '0 V';
+  ctx.font = '12px "Trebuchet MS", sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = topIsPos ? '#b91c1c' : '#1d4ed8';
+  ctx.fillText(topIsPos ? vStr : '0 V', x2 + 10, ty - PT / 2);
+  ctx.fillStyle = topIsPos ? '#1d4ed8' : '#b91c1c';
+  ctx.fillText(topIsPos ? '0 V' : vStr, x2 + 10, by + PT / 2);
 }
 
 function drawAccelTrajectory() {
   const ph = calcAccelPhysics();
-  const { a, V0, v_exit, tCross, q } = ph;
-  const lx = accelLeftX(), rx = accelRightX();
-  const my = midY();
+  const { V0, v_exit, q } = ph;
+  const x  = accelMidX();
+  const ty = topPlY();
+  const by = botPlY();
 
   ctx.setLineDash([]);
-
-  // ── 1. Full path line ──
-  ctx.beginPath();
-  ctx.moveTo(0, my);
-  ctx.lineTo(W(), my);
   ctx.strokeStyle = '#0f766e';
   ctx.lineWidth   = 2.5;
+
+  // ── 1. Entry path (above top plate) ──
+  ctx.beginPath();
+  ctx.moveTo(x, 0);
+  ctx.lineTo(x, ty);
   ctx.stroke();
 
-  // ── 2. Time-spaced dots (closer = slower, farther = faster) ──
-  const d_entry  = lx / PPM;
-  const d_exit   = (W() - rx) / PPM;
-  const t_entry  = d_entry / V0;
-  const t_exitReg = v_exit > 0 ? d_exit / v_exit : 0;
-  const T_total  = t_entry + tCross + t_exitReg;
+  // ── 2. Path through field ──
+  ctx.beginPath();
+  ctx.moveTo(x, ty);
+  ctx.lineTo(x, by);
+  ctx.stroke();
 
-  const N = 28;
-  ctx.fillStyle = 'rgba(15, 118, 110, 0.6)';
-  for (let i = 0; i < N; i++) {
-    const t = (i / (N - 1)) * T_total;
-    let xPx;
-    if (t <= t_entry) {
-      xPx = t * V0 * PPM;
-    } else if (t <= t_entry + tCross) {
-      const tp = t - t_entry;
-      xPx = lx + (V0 * tp + 0.5 * a * tp * tp) * PPM;
-    } else {
-      const tp = t - t_entry - tCross;
-      xPx = rx + tp * v_exit * PPM;
-    }
-    ctx.beginPath();
-    ctx.arc(Math.min(xPx, W() - 2), my, 3.5, 0, Math.PI * 2);
-    ctx.fill();
-  }
+  // ── 3. Exit path (below bottom plate) ──
+  ctx.beginPath();
+  ctx.moveTo(x, by);
+  ctx.lineTo(x, H());
+  ctx.stroke();
 
-  // ── 3. Particle marker at field entry ──
+  // ── 4. Particle marker at top-plate entry ──
   const pCol  = q < 0 ? '#2563eb' : '#dc2626';
   const pDark = q < 0 ? '#1d4ed8' : '#b91c1c';
   const pSign = q < 0 ? '−' : '+';
@@ -395,12 +376,12 @@ function drawAccelTrajectory() {
   ctx.shadowColor   = 'rgba(0,0,0,0.20)';
   ctx.shadowBlur    = 10;
   ctx.shadowOffsetY = 3;
-  const grd = ctx.createRadialGradient(lx - 3, my - 3, 1, lx, my, 10);
+  const grd = ctx.createRadialGradient(x - 3, ty - 3, 1, x, ty, 10);
   grd.addColorStop(0, 'rgba(255,255,255,0.55)');
   grd.addColorStop(0.5, pCol);
   grd.addColorStop(1, pDark);
   ctx.beginPath();
-  ctx.arc(lx, my, 10, 0, Math.PI * 2);
+  ctx.arc(x, ty, 10, 0, Math.PI * 2);
   ctx.fillStyle = grd;
   ctx.fill();
   ctx.restore();
@@ -409,21 +390,19 @@ function drawAccelTrajectory() {
   ctx.font         = 'bold 13px "Trebuchet MS", sans-serif';
   ctx.textAlign    = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(pSign, lx, my + 1);
+  ctx.fillText(pSign, x, ty + 1);
 
-  // ── 4. Speed annotations above the path ──
+  // ── 5. Speed annotations (right of path) ──
   function fmtSpeed(v) {
-    const f = v / 1e7;
-    return `${f.toFixed(1)} × 10${sup(7)} m s⁻¹`;
+    return `${(v / 1e7).toFixed(1)} × 10${sup(7)} m s⁻¹`;
   }
-
   ctx.font         = '12px "Trebuchet MS", sans-serif';
-  ctx.textBaseline = 'bottom';
-  ctx.textAlign    = 'center';
+  ctx.textAlign    = 'left';
+  ctx.textBaseline = 'middle';
   ctx.fillStyle    = 'rgba(21,48,77,0.55)';
-  ctx.fillText(`v₀ = ${fmtSpeed(V0)}`, lx, my - 18);
+  ctx.fillText(`v₀ = ${fmtSpeed(V0)}`, x + 16, ty);
   ctx.fillStyle    = '#0f766e';
-  ctx.fillText(`v = ${fmtSpeed(v_exit)}`, rx, my - 18);
+  ctx.fillText(`v = ${fmtSpeed(v_exit)}`, x + 16, by);
 }
 
 /* ─────────────────────────────── Overlay helpers ───────────────────── */
@@ -477,28 +456,33 @@ function drawFieldArrows() {
     ctx.fillText('E', x2 - 6, ty + 5);
 
   } else {
-    // Acceleration mode — field direction depends on charge sign
-    const lx = accelLeftX(), rx = accelRightX();
+    // Acceleration mode — horizontal plates, vertical field (same region as Deflection).
+    // E points downward for q > 0 (top plate +), upward for q < 0 (bottom plate +).
+    const x1 = plLeft(), x2 = plRight();
+    const ty = topPlY(), by = botPlY();
+    const gapPx = by - ty;
+    if (gapPx < 30) return;
+
     const { q } = getParticle();
-    const rightward = q > 0; // proton: + plate on left  → E rightward
-    const COLS = 5, ROWS = 4;
+    const fieldDown = q > 0;
+    const COLS = 7, ROWS = 4;
 
     for (let c = 0; c < COLS; c++) {
-      const x = lx + (rx - lx) * (c + 0.5) / COLS;
+      const x = x1 + (x2 - x1) * (c + 0.5) / COLS;
       for (let r = 0; r < ROWS; r++) {
-        const y = H() * (r + 1) / (ROWS + 1);
-        if (rightward) {
-          drawArrow(x - ARROW / 2, y, x + ARROW / 2, y);
+        const y = ty + gapPx * (r + 0.5) / ROWS;
+        if (fieldDown) {
+          drawArrow(x, y - ARROW / 2, x, y + ARROW / 2);
         } else {
-          drawArrow(x + ARROW / 2, y, x - ARROW / 2, y);
+          drawArrow(x, y + ARROW / 2, x, y - ARROW / 2);
         }
       }
     }
     ctx.font = 'bold 11px "Trebuchet MS", sans-serif';
-    ctx.textAlign    = rightward ? 'right' : 'left';
+    ctx.textAlign    = 'right';
     ctx.textBaseline = 'top';
     ctx.fillStyle    = 'rgba(37,99,235,0.70)';
-    ctx.fillText('E', rightward ? rx - 6 : lx + 6, 24);
+    ctx.fillText('E', x2 - 6, ty + 5);
   }
 }
 
@@ -531,17 +515,17 @@ function drawForceArrow() {
     ctx.fillText('F', x, y1 + dir * 4);
 
   } else {
-    // Acceleration: force always rightward
-    const x0 = accelLeftX() + PARTICLE_R;
-    const x1 = x0 + arrowLen;
-    const y  = midY();
-    drawArrow(x0, y, x1, y);
+    // Acceleration: force always downward (polarity arranged to accelerate particle downward)
+    const x  = accelMidX();
+    const y0 = topPlY() + PARTICLE_R;
+    const y1 = y0 + arrowLen;
+    drawArrow(x, y0, x, y1);
 
     ctx.font         = 'bold 12px "Trebuchet MS", sans-serif';
     ctx.textAlign    = 'left';
-    ctx.textBaseline = 'bottom';
+    ctx.textBaseline = 'top';
     ctx.fillStyle    = '#92400e';
-    ctx.fillText('F', x1 + 4, y - 2);
+    ctx.fillText('F', x + 4, y1 + 2);
   }
 }
 
