@@ -436,13 +436,16 @@ function drawAccelTrajectory() {
   function fmtSpeed(v) {
     return `${(v / 1e7).toFixed(1)} × 10${sup(7)} m s⁻¹`;
   }
-  ctx.font         = '12px "Trebuchet MS", sans-serif';
-  ctx.textAlign    = 'left';
-  ctx.textBaseline = 'middle';
+  ctx.font      = '12px "Trebuchet MS", sans-serif';
+  ctx.textAlign = 'left';
+  // v₀ label sits above the top plate
+  ctx.textBaseline = 'bottom';
   ctx.fillStyle    = 'rgba(21,48,77,0.55)';
-  ctx.fillText(`v₀ = ${fmtSpeed(V0)}`, x + 16, ty);
+  ctx.fillText(`v₀ = ${fmtSpeed(V0)}`, x + 16, ty - PLATE_T - 4);
+  // v label sits below the bottom plate
+  ctx.textBaseline = 'top';
   ctx.fillStyle    = '#0f766e';
-  ctx.fillText(`v = ${fmtSpeed(v_exit)}`, x + 16, by);
+  ctx.fillText(`v = ${fmtSpeed(v_exit)}`, x + 16, by + PLATE_T + 4);
 }
 
 /* ─────────────────────────────── Overlay helpers ───────────────────── */
