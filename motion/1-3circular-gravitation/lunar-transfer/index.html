@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lunar Transfer — Circular Motion &amp; Gravitation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">&larr; Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics &mdash; Circular Motion &amp; Gravitation 1.3</p>
+      <h1 id="mode-title">Geostationary Transfer</h1>
+      <p class="intro" id="mode-intro">
+        You&rsquo;re in a low equatorial orbit. Transfer to geostationary altitude
+        using as little &Delta;v as possible. WASD to fly.
+      </p>
+    </div>
+    <div class="medal-area" id="medal-area"></div>
+  </section>
+
+  <div class="mode-selector">
+    <button class="mode-btn active" data-mode="geo" type="button">
+      <span class="mode-btn-name">Geostationary</span>
+      <span class="mode-btn-sub">Beginner</span>
+    </button>
+    <button class="mode-btn" data-mode="moon" type="button">
+      <span class="mode-btn-name">Moon Shot</span>
+      <span class="mode-btn-sub">Advanced</span>
+    </button>
+  </div>
+
+  <section class="layout">
+
+    <!-- ── Sidebar ─────────────────────────────────────── -->
+    <aside class="panel controls">
+
+      <div class="status-row" id="status-row">
+        <span class="status-dot"></span>
+        <span id="status-text">In Earth orbit</span>
+      </div>
+
+      <div class="dv-display">
+        <span class="dv-label">&Delta;v used</span>
+        <span class="dv-value" id="dv-value">0</span>
+        <span class="dv-unit">m/s</span>
+      </div>
+
+      <details class="readout-details" open>
+        <summary>Orbital readout</summary>
+        <div class="readout-body">
+          <div class="readout-row">
+            <span class="readout-label">Altitude</span>
+            <span class="readout-val" id="r-alt">&mdash;</span>
+          </div>
+          <div class="readout-row">
+            <span class="readout-label">Speed</span>
+            <span class="readout-val" id="r-speed">&mdash;</span>
+          </div>
+          <div class="readout-row">
+            <span class="readout-label" id="r-label-3">Eccentricity</span>
+            <span class="readout-val" id="r-val-3">&mdash;</span>
+          </div>
+          <div class="readout-row">
+            <span class="readout-label" id="r-label-4">Semi-major axis</span>
+            <span class="readout-val" id="r-val-4">&mdash;</span>
+          </div>
+        </div>
+      </details>
+
+      <details class="readout-details">
+        <summary>Controls</summary>
+        <div class="readout-body controls-help">
+          <p><kbd>A</kbd> / <kbd>D</kbd> &mdash; Rotate</p>
+          <p><kbd>W</kbd> &mdash; Thrust forward</p>
+          <p><kbd>S</kbd> &mdash; Thrust backward</p>
+          <p><kbd>R</kbd> &mdash; Reset</p>
+        </div>
+      </details>
+
+      <button class="action-btn" id="btn-rules" type="button">How to Play</button>
+      <button class="action-btn action-btn--secondary" id="btn-reset" type="button">Reset</button>
+
+      <div class="physics-note">
+        <p class="note-title">Physics concepts</p>
+        <ul>
+          <li>Gravitational force &amp; orbits</li>
+          <li>Hohmann transfer orbits</li>
+          <li>Conservation of energy</li>
+          <li>Gravity assists</li>
+        </ul>
+      </div>
+
+    </aside>
+
+    <!-- ── Canvas ──────────────────────────────────────── -->
+    <div class="game-panel panel">
+      <div class="canvas-wrap">
+        <canvas id="game-canvas"></canvas>
+      </div>
+      <div class="message-bar" id="message-bar">Press W to thrust prograde and raise your orbit toward the Moon.</div>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- ── Rules modal ─────────────────────────────────── -->
+<div class="modal-overlay hidden" id="rules-modal">
+  <div class="modal-box">
+    <h2>How to Play</h2>
+    <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+    <div class="modal-body">
+
+      <h3>Controls</h3>
+      <table class="rules-table">
+        <tr><td><kbd>A</kbd> / <kbd>D</kbd></td><td>Rotate ship left / right</td></tr>
+        <tr><td><kbd>W</kbd></td><td>Thrust forward</td></tr>
+        <tr><td><kbd>S</kbd></td><td>Thrust backward (retrograde)</td></tr>
+        <tr><td><kbd>R</kbd></td><td>Reset to starting orbit</td></tr>
+      </table>
+
+      <h3>Mode 1: Geostationary transfer (beginner)</h3>
+      <p>Start in a low equatorial orbit. Transfer to the white geostationary
+         ring and circularize. A red ground marker rotates with Earth &mdash;
+         a true geostationary satellite appears <em>stationary</em> above it.</p>
+      <table class="rules-table">
+        <tr><th>Medal</th><th>Condition</th></tr>
+        <tr><td>Bronze</td><td>Reach geostationary altitude</td></tr>
+        <tr><td>Silver</td><td>Achieve a circular orbit near GEO radius</td></tr>
+        <tr><td>Gold</td><td>Fully geostationary: matches Earth rotation direction, low eccentricity</td></tr>
+      </table>
+
+      <h3>Mode 2: Moon Shot (advanced)</h3>
+      <p>Transfer from low Earth orbit to the Moon. Both Earth and Moon exert
+         gravity simultaneously.</p>
+      <table class="rules-table">
+        <tr><th>Medal</th><th>Condition</th></tr>
+        <tr><td>Bronze</td><td>Complete one orbit around the Moon</td></tr>
+        <tr><td>Silver</td><td>Achieve a roughly circular lunar orbit</td></tr>
+        <tr><td>Gold</td><td>After Silver: free-return trajectory back to Earth orbit</td></tr>
+      </table>
+
+      <h3>Tips</h3>
+      <ul>
+        <li>Don&rsquo;t point at the target and thrust! Instead, thrust <em>prograde</em>
+            (along your direction of travel) to raise the far side of your orbit.</li>
+        <li>This is a Hohmann transfer: burn at periapsis to raise apoapsis,
+            coast to apoapsis, then burn again to circularize.</li>
+        <li>The dashed white line shows your predicted orbit &mdash; use it to aim!</li>
+        <li>Lower &Delta;v = better score.</li>
+      </ul>
+
+      <h3>The physics</h3>
+      <p>Gravity follows an inverse-square law: F = GMm/r&sup2;. Orbital speed
+         at radius r is v = &radic;(GM/r) &mdash; higher orbits are <em>slower</em>.
+         A geostationary orbit is a circular orbit whose period equals Earth&rsquo;s
+         rotation period, so the satellite hovers over a fixed ground point.</p>
+
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

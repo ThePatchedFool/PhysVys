@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crokinole — Forces &amp; Momentum</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Forces &amp; Momentum 1.2</p>
+      <h1>Crokinole</h1>
+      <p class="intro">
+        A disc-flicking game of skill — and collisions. Hover along the bottom baseline to place
+        your disc, then drag backward to aim and set power. Knock opponents off; aim for the centre hole for 20 points.
+      </p>
+    </div>
+
+    <div class="score-area">
+      <div class="scoreboard">
+        <div class="score-block">
+          <span class="score-name player-color">You</span>
+          <span class="score-num" id="score-player">0</span>
+        </div>
+        <span class="score-sep">vs</span>
+        <div class="score-block">
+          <span class="score-name ai-color">AI</span>
+          <span class="score-num" id="score-ai">0</span>
+        </div>
+      </div>
+      <div class="round-label" id="round-label">Round 1</div>
+    </div>
+  </section>
+
+  <section class="layout">
+
+    <!-- ── Sidebar ─────────────────────────────────────── -->
+    <aside class="panel controls">
+
+      <div class="turn-indicator" id="turn-indicator">
+        <span class="turn-dot"></span>
+        <span id="turn-text">Your turn</span>
+      </div>
+
+      <div class="hand-display">
+        <div class="hand-row">
+          <span class="hand-label player-color">You</span>
+          <span class="hand-count" id="hand-player">12</span>
+          <span class="hand-unit">discs left</span>
+        </div>
+        <div class="hand-row">
+          <span class="hand-label ai-color">AI</span>
+          <span class="hand-count" id="hand-ai">12</span>
+          <span class="hand-unit">discs left</span>
+        </div>
+      </div>
+
+      <button class="action-btn" id="btn-rules" type="button">How to Play</button>
+
+      <button class="action-btn action-btn--secondary hidden"
+              id="btn-new-game" type="button">New Game</button>
+
+      <div class="physics-note">
+        <p class="note-title">Physics concepts</p>
+        <ul>
+          <li>Conservation of momentum</li>
+          <li>Elastic &amp; inelastic collisions</li>
+          <li>Kinetic friction</li>
+          <li>Impulse &amp; force</li>
+        </ul>
+      </div>
+
+    </aside>
+
+    <!-- ── Canvas ──────────────────────────────────────── -->
+    <div class="game-panel panel">
+      <div class="canvas-wrap">
+        <canvas id="game-canvas"></canvas>
+      </div>
+      <div class="message-bar" id="message-bar">&nbsp;</div>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- ── Rules modal ─────────────────────────────────── -->
+<div class="modal-overlay hidden" id="rules-modal">
+  <div class="modal-box">
+    <h2>How to Play Crokinole</h2>
+    <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+    <div class="modal-body">
+
+      <h3>Objective</h3>
+      <p>Be the first to reach <strong>100 points</strong> across multiple rounds.</p>
+
+      <h3>Setup</h3>
+      <p>Each player starts every round with <strong>12 discs</strong>. You shoot from the
+         <em>bottom half</em> (blue zone); the AI shoots from the top half (pink zone).
+         Players alternate shots — you go first.</p>
+
+      <h3>Taking a shot</h3>
+      <ol>
+        <li><strong>Hover</strong> along the bottom baseline (the inner ring, bottom half) —
+            a ghost disc snaps to show placement.</li>
+        <li><strong>Click and drag backward</strong> — the arrow shows where the disc will travel.</li>
+        <li>Drag further back for more power. <strong>Release</strong> to flick.</li>
+      </ol>
+
+      <h3>The key rule</h3>
+      <ul>
+        <li>If the opponent has <strong>any disc on the board</strong>, your shot <em>must</em>
+            make contact with at least one — otherwise your disc is immediately removed.</li>
+        <li>If there are <strong>no opponent discs</strong>, your disc must come to rest inside
+            the scoring area (within the 5-point ring) or it is removed.</li>
+      </ul>
+
+      <h3>Scoring zones</h3>
+      <table class="rules-table">
+        <tr><th>Zone</th><th>Points</th></tr>
+        <tr><td>Centre hole</td><td>20 (disc removed from board)</td></tr>
+        <tr><td>Inner ring</td><td>15</td></tr>
+        <tr><td>Middle ring</td><td>10</td></tr>
+        <tr><td>Outer ring</td><td>5</td></tr>
+        <tr><td>Ditch (off the board)</td><td>0 — removed</td></tr>
+      </table>
+
+      <h3>Round scoring</h3>
+      <p>At round end, each player totals their disc points (including 20s scored during the
+         round). The player with the higher total scores the <em>difference</em>. Ties score
+         nothing.</p>
+      <p><strong>Example:</strong> You 45 pts, AI 30 pts → you earn 15 game points.</p>
+
+      <h3>Winning</h3>
+      <p>First to <strong>100 game points</strong> wins!</p>
+
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

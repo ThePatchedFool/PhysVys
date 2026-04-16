@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gorillas — Projectile Motion</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.1</p>
+      <h1>Gorillas</h1>
+      <p class="intro">
+        Inspired by the 1990 classic. Throw explosive bananas across the city —
+        you need to apply the projectile motion equations to win. Horizontal and
+        vertical motion are independent; only gravity acts vertically.
+      </p>
+    </div>
+
+    <div class="score-area">
+      <div class="scoreboard">
+        <div class="score-block">
+          <span class="score-name player-color">You</span>
+          <span class="score-num" id="score-player">0</span>
+        </div>
+        <span class="score-sep">vs</span>
+        <div class="score-block">
+          <span class="score-name ai-color">AI</span>
+          <span class="score-num" id="score-ai">0</span>
+        </div>
+      </div>
+      <div class="round-label" id="round-label">Round 1 of 5</div>
+    </div>
+  </section>
+
+  <section class="layout">
+
+    <!-- ── Controls sidebar ─────────────────────────────── -->
+    <aside class="panel controls">
+
+      <div class="turn-indicator" id="turn-indicator">
+        <span class="turn-dot" id="turn-dot"></span>
+        <span id="turn-text">Your turn</span>
+      </div>
+
+      <!-- Angle -->
+      <div class="control-group">
+        <label>
+          Launch angle
+          <span class="label-value">
+            <input class="num-input" id="num-angle" type="number"
+                   min="1" max="89" step="1" value="45">°
+          </span>
+        </label>
+        <input class="slider" id="slider-angle" type="range"
+               min="1" max="89" step="1" value="45">
+      </div>
+
+      <!-- Speed -->
+      <div class="control-group">
+        <label>
+          Launch speed
+          <span class="label-value">
+            <input class="num-input" id="num-speed" type="number"
+                   min="10" max="100" step="1" value="52"> m/s
+          </span>
+        </label>
+        <input class="slider" id="slider-speed" type="range"
+               min="10" max="100" step="1" value="52">
+      </div>
+
+      <!-- Wind -->
+      <div class="wind-row" id="wind-row">
+        <span class="wind-icon" id="wind-icon">→</span>
+        Wind: <strong><span id="wind-val">0.0</span> m/s²</strong>
+      </div>
+
+      <button class="action-btn fire-btn" id="btn-fire" type="button">
+        Fire!
+      </button>
+
+      <!-- Physics readout -->
+      <div class="readout-panel">
+        <p class="readout-title">If terrain were flat …</p>
+        <div class="readout-row">
+          <span class="readout-label">Range</span>
+          <span class="readout-val" id="readout-range">—</span>
+        </div>
+        <div class="readout-row">
+          <span class="readout-label">Max height</span>
+          <span class="readout-val" id="readout-h">—</span>
+        </div>
+        <div class="readout-row">
+          <span class="readout-label">Flight time</span>
+          <span class="readout-val" id="readout-t">—</span>
+        </div>
+      </div>
+
+      <button class="action-btn action-btn--secondary new-game-btn hidden"
+              id="btn-new-game" type="button">
+        New Game
+      </button>
+
+      <details class="explain-details">
+        <summary>Physics</summary>
+        <div>
+          <p style="margin:0 0 0.5rem"><strong>Equations of motion:</strong></p>
+          <p class="mono">x(t) = v·cosθ · t<br>y(t) = v·sinθ · t − ½gt²</p>
+          <p style="margin:0.5rem 0">
+            Horizontal velocity is <em>constant</em> (no horizontal force
+            unless wind is blowing). Gravity only changes the vertical component.
+          </p>
+          <p style="margin:0">
+            <strong>Range (equal heights):</strong><br>
+            R = v²·sin(2θ) / g<br>
+            Maximum range at θ = 45°.
+          </p>
+        </div>
+      </details>
+
+    </aside>
+
+    <!-- ── Game canvas ──────────────────────────────────── -->
+    <div class="game-panel panel">
+      <div class="canvas-wrap">
+        <canvas id="game-canvas" width="960" height="480"></canvas>
+      </div>
+      <div class="message-bar" id="message-bar">&nbsp;</div>
+    </div>
+
+  </section>
+
+</main>
+<script src="script.js"></script>
+</body>
+</html>
