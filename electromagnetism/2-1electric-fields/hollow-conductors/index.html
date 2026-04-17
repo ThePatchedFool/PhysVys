@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hollow Conductors — SACE Stage 2 Physics</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics — Topic 2: Electromagnetism</p>
+        <h1>Hollow Conductors</h1>
+        <p class="intro">
+          Charges on a conductor rearrange themselves until the field inside is zero.
+          Explore two consequences: a hollow cavity is perfectly shielded from
+          outside fields, and bending a charged wire focuses its field at the
+          convex tip — even without any redistribution of the charges themselves.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="btn-mode-cavity" class="toggle-button active" type="button" aria-pressed="true">
+          Cavity Shielding
+        </button>
+        <button id="btn-mode-point" class="toggle-button" type="button" aria-pressed="false">
+          Sharp Points
+        </button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2 id="controls-title">Controls</h2>
+
+        <!-- ─────────── Mode A controls ─────────── -->
+        <div id="controls-cavity" class="mode-controls">
+          <div class="control-group">
+            <label for="field-strength">External field strength</label>
+            <div class="slider-row">
+              <input id="field-strength" type="range" min="0" max="100" step="1" value="60">
+              <span id="field-strength-val" class="slider-readout">60%</span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="field-angle">Field direction</label>
+            <div class="slider-row">
+              <input id="field-angle" type="range" min="0" max="359" step="1" value="0">
+              <span id="field-angle-val" class="slider-readout">0°</span>
+            </div>
+            <div class="direction-buttons">
+              <button class="dir-btn" data-angle="0" type="button">→</button>
+              <button class="dir-btn" data-angle="90" type="button">↓</button>
+              <button class="dir-btn" data-angle="180" type="button">←</button>
+              <button class="dir-btn" data-angle="270" type="button">↑</button>
+            </div>
+          </div>
+
+          <div class="control-group toggle-row">
+            <label class="check-row">
+              <input id="show-lines" type="checkbox" checked>
+              <span>Show field lines</span>
+            </label>
+            <label class="check-row">
+              <input id="show-electrons" type="checkbox" checked>
+              <span>Show electrons</span>
+            </label>
+            <label class="check-row">
+              <input id="show-ions" type="checkbox" checked>
+              <span>Show + ions</span>
+            </label>
+            <label class="check-row">
+              <input id="show-probe" type="checkbox" checked>
+              <span>Show test probe</span>
+            </label>
+          </div>
+
+          <div class="readout-card">
+            <span class="readout-label">|E| at probe</span>
+            <span id="probe-readout" class="readout-value mono">—</span>
+            <span id="probe-zone" class="probe-zone">outside</span>
+          </div>
+
+          <div class="explainer">
+            <p>
+              The conductor is a metal shell. Its positive ions
+              (<span class="legend-dot ion">+</span>) are pinned in the
+              crystal lattice, but the electrons
+              (<span class="legend-dot electron">−</span>) are free to
+              drift. The external field pushes electrons along the surface
+              until their own field, added to the external field, gives
+              <strong>zero net field inside the conductor</strong>.
+              Anything in the cavity is perfectly shielded.
+            </p>
+            <p class="muted">
+              Rotate the field and watch the electrons migrate. The side
+              they leave behind is "positive" only because the fixed +
+              ions are no longer covered.
+            </p>
+          </div>
+        </div>
+
+        <!-- ─────────── Mode B controls ─────────── -->
+        <div id="controls-point" class="mode-controls hidden">
+          <div class="control-group">
+            <label for="point-count">Number of charges</label>
+            <div class="slider-row">
+              <input id="point-count" type="range" min="0" max="40" step="1" value="10">
+              <span id="point-count-val" class="slider-readout">10</span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="point-curvature">Curvature</label>
+            <div class="slider-row">
+              <input id="point-curvature" type="range" min="0" max="100" step="1" value="0">
+              <span id="point-curvature-val" class="slider-readout">0%</span>
+            </div>
+          </div>
+
+          <div class="control-group toggle-row">
+            <label class="check-row">
+              <input id="show-lines-2" type="checkbox" checked>
+              <span>Show field lines</span>
+            </label>
+            <label class="check-row">
+              <input id="show-probe-2" type="checkbox" checked>
+              <span>Show test probe</span>
+            </label>
+          </div>
+
+          <div class="readout-card">
+            <span class="readout-label">|E| at apex</span>
+            <span id="apex-readout" class="readout-value mono">—</span>
+          </div>
+          <div class="readout-card">
+            <span class="readout-label">|E| at probe</span>
+            <span id="probe-readout-2" class="readout-value mono">—</span>
+          </div>
+
+          <div class="explainer">
+            <p>
+              Bend the wire. The charges stay evenly spaced along its
+              length — pure mutual repulsion with no curvature bias — but
+              the field at the apex grows anyway, because the geometry
+              itself folds the rest of the wire closer to the convex
+              point. The slider goes from straight line → semicircle at
+              half-way → stretched ellipse with an increasingly sharp
+              apex.
+            </p>
+          </div>
+        </div>
+
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap" id="canvas-wrap">
+          <canvas id="simulation-canvas" width="960" height="560" aria-label="Hollow conductor visualisation"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
