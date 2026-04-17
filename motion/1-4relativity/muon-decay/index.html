@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muon Decay Experiment — SACE Stage 2 Physics</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+      <p class="eyebrow">SACE Stage 2 Physics — Motion 1.4</p>
+      <h1>Muon Decay Experiment</h1>
+      <p class="intro">
+        A re-creation of the Frisch & Smith 1963 experiment. Detect cosmic-ray muons
+        at the summit of Mt Washington, then again at sea level. Compare the survival
+        rate with what classical physics predicts — the discrepancy is one of the
+        cleanest experimental confirmations of special relativity.
+      </p>
+    </div>
+
+    <div class="phase-bar" aria-label="Experiment progress">
+      <div class="phase-step active" data-phase="1">
+        <span class="phase-num">1</span>
+        <span class="phase-name">Mt Washington</span>
+      </div>
+      <div class="phase-sep"></div>
+      <div class="phase-step" data-phase="2">
+        <span class="phase-num">2</span>
+        <span class="phase-name">Sea Level</span>
+      </div>
+      <div class="phase-sep"></div>
+      <div class="phase-step" data-phase="3">
+        <span class="phase-num">3</span>
+        <span class="phase-name">Classical</span>
+      </div>
+      <div class="phase-sep"></div>
+      <div class="phase-step" data-phase="4">
+        <span class="phase-num">4</span>
+        <span class="phase-name">Effective Distance</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="layout">
+
+    <!-- ═══════════ Main interactive area ═══════════ -->
+    <div class="main-col">
+
+      <!-- ── Phase 1 ── -->
+      <section id="phase-1" class="phase-content panel">
+        <header class="phase-header">
+          <h2>Phase 1 — Mt Washington Summit</h2>
+          <p class="phase-sub">Altitude 1910 m. Muons arrive at roughly 568 per hour.</p>
+        </header>
+
+        <div class="top-row">
+          <div class="scintillator-box">
+            <div class="scintillator-label">Scintillator</div>
+            <div class="scintillator" id="scintillator">
+              <div class="scint-inner"></div>
+            </div>
+          </div>
+
+          <div class="collection-status">
+            <div class="status-row">
+              <span class="status-label">Elapsed</span>
+              <span class="status-val mono" id="stopwatch">00:00</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Muons detected</span>
+              <span class="status-val" id="arrived-count">0</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Queue</span>
+              <span class="status-val" id="queue-count">0</span>
+            </div>
+            <button class="action-btn" id="btn-stop" disabled>Stop collecting</button>
+            <p class="stop-hint" id="stop-hint">Collect data for at least 5 minutes</p>
+          </div>
+        </div>
+
+        <div class="cro-section">
+          <div class="cro-section-head">
+            <h3>CRO Traces</h3>
+            <p class="cro-hint">Read the time of the decay spike from the active trace and enter it below.</p>
+          </div>
+
+          <div class="cro-active-wrap" id="cro-active-wrap">
+            <p class="cro-empty" id="cro-empty">Waiting for the first muon…</p>
+            <!-- active trace injected here -->
+          </div>
+
+          <div class="cro-confirmed-wrap">
+            <h4 class="cro-confirmed-title">Confirmed traces <span class="muted" id="confirmed-count-inline">(0)</span></h4>
+            <div class="cro-confirmed-list" id="cro-confirmed-list"></div>
+          </div>
+        </div>
+
+        <div class="phase-nav">
+          <button class="action-btn" id="btn-next-1" disabled>Next: Sea Level →</button>
+          <p class="phase-nav-hint" id="phase-nav-hint-1">Stop collecting and confirm all queued traces to continue.</p>
+        </div>
+      </section>
+
+      <!-- ── Phase 2 ── -->
+      <section id="phase-2" class="phase-content panel hidden">
+        <header class="phase-header">
+          <h2>Phase 2 — Sea Level</h2>
+          <p class="phase-sub">
+            A second identical detector at sea level, running for the same duration as Phase 1.
+            Played back at 20× speed. Muons are counted automatically — no input required.
+          </p>
+        </header>
+
+        <div class="top-row">
+          <div class="scintillator-box">
+            <div class="scintillator-label">Scintillator</div>
+            <div class="scintillator" id="scintillator-2">
+              <div class="scint-inner"></div>
+            </div>
+          </div>
+
+          <div class="collection-status">
+            <div class="status-row">
+              <span class="status-label">Sim time</span>
+              <span class="status-val mono" id="stopwatch-2">00:00</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Muons detected</span>
+              <span class="status-val" id="arrived-count-2">0</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Speed</span>
+              <span class="status-val">20×</span>
+            </div>
+            <div class="playback-progress">
+              <div class="playback-bar" id="playback-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cro-section">
+          <div class="cro-section-head">
+            <h3>Passing CRO Traces</h3>
+            <p class="cro-hint">Traces flash past — we only count how many arrive, not when they decay.</p>
+          </div>
+          <div class="cro-active-wrap" id="cro-active-wrap-2">
+            <p class="cro-empty">Detector waiting…</p>
+          </div>
+        </div>
+
+        <div class="phase-nav">
+          <button class="action-btn" id="btn-next-2" disabled>Next: Analysis →</button>
+          <p class="phase-nav-hint" id="phase-nav-hint-2">Playback in progress…</p>
+        </div>
+      </section>
+
+      <!-- ── Phase 3 ── -->
+      <section id="phase-3" class="phase-content panel hidden">
+        <header class="phase-header">
+          <h2>Phase 3 — Classical Survival Prediction</h2>
+          <p class="phase-sub">
+            For each muon detected at Mt Washington, we drew a line starting at 1910 m and
+            extending downward by the distance that muon <em>should</em> travel before decay,
+            assuming it moves at 0.994 c. Count how many lines reach sea level.
+          </p>
+        </header>
+
+        <div class="graph-wrap">
+          <canvas id="altitude-canvas" width="1040" height="540"
+                  aria-label="Muon altitude graph — vertical line per muon showing classical travel distance"></canvas>
+        </div>
+
+        <div class="phase3-row">
+          <details class="explain-details">
+            <summary>How is distance calculated?</summary>
+            <div>
+              <p>
+                All muons travel at approximately <strong>0.994 c</strong>.
+                Once we know the time <em>t</em> between detection and decay, the distance
+                travelled before decay is simply
+              </p>
+              <p class="eqn"><var>d</var> <span class="op">=</span> 0.994 <span class="op">×</span> 3 <span class="op">×</span> 10<sup>8</sup>&nbsp;m/s <span class="op">×</span> <var>t</var></p>
+              <p>
+                A muon that decays after 2.2 μs (the mean lifetime) travels
+                only about <strong>660 m</strong> — nowhere near the 1910 m needed to
+                reach sea level from Mt Washington. A muon would need to live for
+                ≈ 6.38 μs to make it all the way down, which is almost three mean
+                lifetimes.
+              </p>
+              <p>
+                Count how many of your Phase 1 muons reach sea level according to this
+                classical picture. Compare that number to the count measured at sea
+                level in Phase 2.
+              </p>
+            </div>
+          </details>
+
+          <div class="tally-card">
+            <p class="tally-title">Compare your numbers</p>
+            <div class="tally-row">
+              <span class="tally-label">Phase 1 — muons detected at Mt Washington</span>
+              <span class="tally-val" id="tally-mountain">—</span>
+            </div>
+            <div class="tally-row">
+              <span class="tally-label">Phase 2 — muons detected at sea level</span>
+              <span class="tally-val" id="tally-sea">—</span>
+            </div>
+            <div class="tally-row tally-row--student">
+              <label class="tally-label" for="tally-predicted">
+                Your classical prediction (from graph)
+              </label>
+              <input type="number" id="tally-predicted" class="tally-input" min="0" step="1" placeholder="count">
+            </div>
+          </div>
+        </div>
+
+        <div class="phase-nav">
+          <button class="action-btn" id="btn-next-3">Next: Effective Distance →</button>
+          <p class="phase-nav-hint">Enter your count above, then continue.</p>
+        </div>
+      </section>
+
+      <!-- ── Phase 4 ── -->
+      <section id="phase-4" class="phase-content panel hidden">
+        <header class="phase-header">
+          <h2>Phase 4 — Effective Distance</h2>
+          <p class="phase-sub">
+            Classical physics predicted only a handful of muons should reach sea level,
+            yet the sea-level detector counted hundreds. Something in our calculation
+            is wrong. If we <em>accept</em> the sea-level count as correct, what
+            distance do the muons behave as if they travelled?
+          </p>
+        </header>
+
+        <div class="phase4-grid">
+          <div class="graph-wrap">
+            <canvas id="effdist-canvas" width="1040" height="540"
+                    aria-label="Effective distance graph — shaded band shows what altitude the muons behave as if they fell through"></canvas>
+          </div>
+
+          <div class="phase4-side">
+
+            <div class="tally-card">
+              <p class="tally-title">The measurements</p>
+              <div class="tally-row">
+                <span class="tally-label">Muons at Mt Washington</span>
+                <span class="tally-val" id="eff-n-mtn">—</span>
+              </div>
+              <div class="tally-row">
+                <span class="tally-label">Muons at sea level</span>
+                <span class="tally-val" id="eff-n-sea">—</span>
+              </div>
+              <div class="tally-row">
+                <span class="tally-label">Survival fraction (N<sub>sea</sub> / N<sub>mtn</sub>)</span>
+                <span class="tally-val" id="eff-survival">—</span>
+              </div>
+              <div class="tally-row">
+                <span class="tally-label">Mean decay time ⟨t⟩ (from Phase 1)</span>
+                <span class="tally-val" id="eff-mean-t">—</span>
+              </div>
+            </div>
+
+            <details class="explain-details" open>
+              <summary>Finding the effective distance</summary>
+              <div>
+                <p>
+                  At the summit we recorded <span id="eff-inline-nmtn">—</span> muons with a mean
+                  decay time of <span id="eff-inline-t">—</span> μs. Classically, the probability
+                  of a muon surviving long enough to travel a distance <em>d</em> is:
+                </p>
+                <p class="eqn">
+                  <var>P</var>(survive) <span class="op">=</span> <var>e</var><sup>−<var>d</var> / (<var>v</var> · ⟨<var>t</var>⟩)</sup>
+                </p>
+                <p>
+                  The sea-level detector actually measured a survival fraction of
+                  <span id="eff-inline-frac">—</span>. Solving for <em>d</em>:
+                </p>
+                <p class="eqn">
+                  <var>d</var><sub>eff</sub>
+                  <span class="op">=</span>
+                  −<var>v</var> <span class="op">·</span> ⟨<var>t</var>⟩ <span class="op">·</span> ln<span class="frac"><span class="num"><var>N</var><sub>sea</sub></span><span class="den"><var>N</var><sub>mtn</sub></span></span>
+                </p>
+                <p>
+                  Try the slider: find the value of <em>d</em> for which the predicted
+                  survival fraction matches the one we measured. That is the distance
+                  the muons <em>behave as though</em> they had travelled.
+                </p>
+              </div>
+            </details>
+
+            <div class="eff-slider-card">
+              <label for="eff-slider">Effective distance <em>d</em></label>
+              <input type="range" id="eff-slider" class="slider" min="10" max="2200" step="1" value="1910">
+              <div class="eff-readout-row">
+                <span class="eff-readout-label">d =</span>
+                <span class="eff-readout-val mono" id="eff-slider-val">1910 m</span>
+              </div>
+              <div class="eff-readout-row">
+                <span class="eff-readout-label">predicted survival =</span>
+                <span class="eff-readout-val mono" id="eff-predicted-frac">—</span>
+              </div>
+              <div class="eff-readout-row">
+                <span class="eff-readout-label">measured survival =</span>
+                <span class="eff-readout-val mono" id="eff-measured-frac">—</span>
+              </div>
+              <button class="action-btn action-btn--secondary eff-snap-btn" id="eff-snap-btn">
+                Snap to best match
+              </button>
+            </div>
+
+            <div class="gamma-card" id="gamma-card">
+              <p class="gamma-title">The ratio</p>
+              <div class="gamma-row">
+                <span class="gamma-label">L / d<sub>eff</sub> =</span>
+                <span class="gamma-val mono" id="gamma-ratio">—</span>
+              </div>
+              <p class="gamma-hint">
+                In the muon's reference frame the mountain is moving — and
+                moving rulers contract. The muon "sees" only a distance
+                <em>L / γ</em>, where <em>γ</em> is the Lorentz factor. The ratio
+                above is the Lorentz factor you have extracted from your own
+                measurements.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="phase-nav">
+          <button class="action-btn action-btn--secondary" id="btn-restart">Restart</button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ═══════════ Persistent data table ═══════════ -->
+    <aside class="data-col panel">
+      <h3 class="data-title">Data</h3>
+
+      <div class="data-section">
+        <h4 class="data-subtitle">Summary</h4>
+        <table class="summary-table">
+          <thead>
+            <tr><th>Location</th><th>Time</th><th>N</th><th>Rate (/hr)</th></tr>
+          </thead>
+          <tbody id="summary-tbody">
+            <tr id="summary-row-1">
+              <td>Mt Washington</td>
+              <td class="mono" id="summary-time-1">—</td>
+              <td class="mono" id="summary-n-1">—</td>
+              <td class="mono" id="summary-rate-1">—</td>
+            </tr>
+            <tr id="summary-row-2" class="muted">
+              <td>Sea Level</td>
+              <td class="mono" id="summary-time-2">—</td>
+              <td class="mono" id="summary-n-2">—</td>
+              <td class="mono" id="summary-rate-2">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="data-section">
+        <h4 class="data-subtitle">Mt Washington — decay times</h4>
+        <div class="detail-table-wrap">
+          <table class="detail-table">
+            <thead>
+              <tr><th>#</th><th>t (μs)</th></tr>
+            </thead>
+            <tbody id="detail-tbody">
+              <tr class="detail-empty"><td colspan="2">No muons confirmed yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </aside>
+
+  </section>
+</main>
+
+<!-- Phase-transition modal -->
+<div id="modal-backdrop" class="modal-backdrop hidden" aria-hidden="true">
+  <div class="modal panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h2 id="modal-title">—</h2>
+    <div id="modal-body">—</div>
+    <button class="action-btn" id="modal-continue">Continue</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
