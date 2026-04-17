@@ -1,0 +1,228 @@
+:root {
+  --bg-top: #eef6ff;
+  --bg-bottom: #d7e8ff;
+  --panel: rgba(255, 255, 255, 0.82);
+  --panel-border: rgba(18, 57, 99, 0.12);
+  --ink: #15304d;
+  --muted: #55708d;
+  --accent: #0f766e;
+  --accent-strong: #0d9488;
+  --shadow: 0 24px 60px rgba(19, 48, 77, 0.14);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.85), transparent 30%),
+    linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+}
+
+.page {
+  width: min(1280px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0 2rem;
+}
+
+/* ── Hero ── */
+
+.hero {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: end;
+}
+
+.hero-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(21, 48, 77, 0.12);
+}
+.hero-link:hover { background: white; }
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 0.95;
+}
+
+.intro {
+  max-width: 68ch;
+  color: var(--muted);
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* ── Layout ── */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 390px) minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+/* ── Controls ── */
+
+.controls { padding: 1.25rem; }
+.controls h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.15rem;
+}
+.controls h2:not(:first-child) {
+  margin-top: 1.25rem;
+}
+
+.constants {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: rgba(239, 247, 255, 0.95);
+}
+
+.v-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: rgba(239, 247, 255, 0.95);
+}
+.v-control input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent-strong);
+}
+
+.const-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.k-label {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.k-val {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.mono { font-family: "Courier New", monospace; }
+
+.explainer {
+  padding: 0.85rem 1rem;
+  background: rgba(239, 247, 255, 0.95);
+  border-radius: 14px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.explainer p { margin: 0.45rem 0; }
+.explainer p:first-child { margin-top: 0; }
+.explainer p:last-child { margin-bottom: 0; }
+.muted { color: var(--muted); }
+
+/* ── Toggle buttons ── */
+
+.toggle-button {
+  padding: 0.85rem 1.15rem;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #475569, #64748b);
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(71, 85, 105, 0.22);
+  transition: background 0.15s, transform 0.05s;
+}
+.toggle-button.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 10px 24px rgba(15, 118, 110, 0.28);
+}
+.toggle-button:active { transform: translateY(1px); }
+
+/* ── Canvas ── */
+
+.visual-panel {
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.canvas-wrap {
+  overflow: hidden;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(225, 238, 255, 0.94));
+}
+
+.scope-wrap {
+  background: linear-gradient(180deg, #0b1220, #111d33);
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: default;
+  touch-action: manipulation;
+}
+
+#sim {
+  aspect-ratio: 960 / 540;
+  cursor: crosshair;
+}
+#scope {
+  aspect-ratio: 960 / 480;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 960px) {
+  .hero { flex-direction: column; align-items: start; }
+  .hero-actions { justify-content: start; }
+  .layout { grid-template-columns: 1fr; }
+}

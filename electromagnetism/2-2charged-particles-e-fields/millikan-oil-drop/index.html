@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Millikan's Oil Drop — SACE Stage 2 Physics</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <a class="hero-link" href="../../../index.html">← Back to Main Menu</a>
+        <p class="eyebrow">SACE Stage 2 Physics — Topic 2: Electricity and Magnetism</p>
+        <h1>Millikan's Oil Drop</h1>
+        <p class="intro">
+          Charged oil drops drift between two parallel plates. When the
+          electric force on a drop exactly balances gravity, it hangs
+          perfectly still. Measure its radius with the microscope,
+          balance the forces, and see what you can learn about the
+          charge on each drop.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="btn-spritz" class="toggle-button active" type="button">Spritz</button>
+        <button id="btn-clear" class="toggle-button" type="button">Clear</button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel controls">
+        <h2>Plate voltage</h2>
+        <div class="v-control">
+          <div class="const-row">
+            <label for="v-slider" class="k-label">V</label>
+            <span class="k-val mono"><span id="v-val">500</span> V</span>
+          </div>
+          <input id="v-slider" type="range" min="100" max="1000" step="25" value="500">
+        </div>
+
+        <h2>Apparatus constants</h2>
+        <div class="constants">
+          <div class="const-row"><span class="k-label">Plate separation</span><span class="k-val mono">d = 5.00 mm</span></div>
+          <div class="const-row"><span class="k-label">Oil density</span><span class="k-val mono">ρ = 875 kg/m³</span></div>
+          <div class="const-row"><span class="k-label">Gravity</span><span class="k-val mono">g = 9.80 m/s⁻²</span></div>
+        </div>
+
+        <h2>How to use</h2>
+        <div class="explainer">
+          <p>
+            Click <strong>Spritz</strong> to puff oil drops into the chamber
+            from the atomiser. Most will rise or fall — but a few will
+            balance and hang motionless. It often takes several spritzes
+            to collect enough stable drops.
+          </p>
+          <p>
+            You can adjust the plate voltage <span class="mono">V</span>.
+            Changing it shifts which drops happen to balance: make sure
+            you record the voltage you used alongside each measurement.
+          </p>
+          <p>
+            Click any drop (moving or still) to examine it under the
+            microscope. Read its radius from the scale.
+          </p>
+          <p>
+            For a <em>stationary</em> drop the electric force balances
+            gravity: <span class="mono">qE = mg</span>. Use the constants
+            above together with your measured radius to calculate the
+            drop's charge <span class="mono">q</span>. Collect a handful
+            of drops in a spreadsheet and look carefully at the numbers
+            you get.
+          </p>
+          <p class="muted">
+            No drag or buoyancy is modelled. In reality a drop reaches
+            terminal velocity almost immediately, so a "floating" drop
+            really is in true force balance.
+          </p>
+        </div>
+      </aside>
+
+      <section class="panel visual-panel">
+        <div class="canvas-wrap">
+          <canvas id="sim" width="960" height="540" aria-label="Millikan oil drop chamber"></canvas>
+        </div>
+        <div class="canvas-wrap scope-wrap">
+          <canvas id="scope" width="960" height="480" aria-label="Microscope view"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
